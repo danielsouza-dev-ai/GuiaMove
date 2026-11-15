@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Outfit, Fredoka } from "next/font/google";
+import { PwaRegister } from "@/components/shared/PwaRegister";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -41,6 +42,7 @@ export default function RootLayout({
       className={`${outfit.variable} ${fredoka.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[#F0F9FF] text-[#0F172A]">
+        <PwaRegister />
         {children}
       </body>
     </html>

@@ -1,69 +1,106 @@
-import Image from "next/image";
+import Link from 'next/link';
+import { ArrowRight, Clock, Layers, Sparkles, Thermometer } from 'lucide-react';
+import { MoveKitHeader } from '@/components/shared/MoveKitHeader';
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
+    <div className="min-h-screen flex flex-col bg-[#F0F9FF]">
+      <MoveKitHeader subtitle="Ferramentas gratuitas de rotina, autonomia e movimento por @dansouza.move" />
+
+      <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-8 flex flex-col gap-8">
+        <section className="rounded-3xl bg-white border border-[#BAE6FD] p-6 sm:p-8 shadow-xs">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F0F9FF] border border-[#BAE6FD] text-xs font-semibold text-[#0284C7] mb-3">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>100% gratuito e direto no navegador</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#0F172A] leading-tight">
+            Apoio prático para a rotina de casa e da clínica
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="mt-2 text-[#475569] text-base max-w-2xl">
+            Sem cadastro, sem anúncios e sem envio de dados da criança para a nuvem. Tudo fica salvo apenas no seu aparelho.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        </section>
+
+        <section aria-label="Ferramentas disponíveis" className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Link
+            href="/temporizador"
+            className="group rounded-3xl bg-white border-2 border-[#BAE6FD] hover:border-[#0284C7] p-6 flex flex-col justify-between gap-5 shadow-xs transition active:scale-[0.99]"
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <div className="flex items-start justify-between gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-[#F0F9FF] border border-[#BAE6FD] flex items-center justify-center text-[#0284C7]">
+                <Clock className="w-7 h-7" />
+              </div>
+              <span className="px-3 py-1 rounded-full bg-[#FEF3C7] text-[#92400E] text-xs font-bold">
+                Disponível
+              </span>
+            </div>
+
+            <div>
+              <h2 className="text-xl font-bold text-[#0F172A]">Temporizador Visual</h2>
+              <p className="mt-1.5 text-sm text-[#475569]">
+                Contagem visual lúdica para ajudar nas transições sem briga com o relógio.
+              </p>
+            </div>
+
+            <div className="inline-flex items-center gap-2 text-sm font-bold text-[#0284C7] group-hover:translate-x-1 transition">
+              <span>Abrir temporizador</span>
+              <ArrowRight className="w-4 h-4" />
+            </div>
+          </Link>
+
+          <Link
+            href="/termometro"
+            className="group rounded-3xl bg-white border-2 border-[#BAE6FD] hover:border-[#0284C7] p-6 flex flex-col justify-between gap-5 shadow-xs transition active:scale-[0.99]"
           >
-            Documentation
-          </a>
-        </div>
+            <div className="flex items-start justify-between gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-[#F0F9FF] border border-[#BAE6FD] flex items-center justify-center text-[#F59E0B]">
+                <Thermometer className="w-7 h-7" />
+              </div>
+              <span className="px-3 py-1 rounded-full bg-[#FEF3C7] text-[#92400E] text-xs font-bold">
+                Disponível
+              </span>
+            </div>
+
+            <div>
+              <h2 className="text-xl font-bold text-[#0F172A]">Termômetro Sensorial</h2>
+              <p className="mt-1.5 text-sm text-[#475569]">
+                Quatro zonas visuais para a criança mostrar como está e abrir a estratégia de calma em um toque.
+              </p>
+            </div>
+
+            <div className="inline-flex items-center gap-2 text-sm font-bold text-[#0284C7] group-hover:translate-x-1 transition">
+              <span>Abrir termômetro</span>
+              <ArrowRight className="w-4 h-4" />
+            </div>
+          </Link>
+        </section>
+
+        <section aria-label="Próximas ondas" className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="rounded-3xl bg-white/70 border border-dashed border-[#BAE6FD] p-5 flex items-center gap-4">
+            <div className="w-11 h-11 rounded-2xl bg-[#F0F9FF] flex items-center justify-center text-[#64748B] shrink-0">
+              <Layers className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wide text-[#0284C7]">Em breve · Onda 2</p>
+              <p className="font-bold text-[#0F172A]">Sequenciamento Lógico do Dia</p>
+            </div>
+          </div>
+
+          <div className="rounded-3xl bg-white/70 border border-dashed border-[#BAE6FD] p-5 flex items-center gap-4">
+            <div className="w-11 h-11 rounded-2xl bg-[#F0F9FF] flex items-center justify-center text-[#64748B] shrink-0">
+              <Sparkles className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wide text-[#0284C7]">Em breve · Onda 3</p>
+              <p className="font-bold text-[#0F172A]">Rotinas & Primeiro/Depois (ARASAAC)</p>
+            </div>
+          </div>
+        </section>
       </main>
+
+      <footer className="py-5 text-center text-xs text-[#64748B] border-t border-[#BAE6FD]/60 bg-white/60">
+        MoveKit por <span className="font-semibold text-[#0F172A]">@dansouza.move</span> · Acadêmico de Fisioterapia, ABA e IA
+      </footer>
     </div>
   );
 }
