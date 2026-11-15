@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { MoveKitHeader } from '@/components/shared/MoveKitHeader';
+import { GuiaMoveHeader } from '@/components/shared/GuiaMoveHeader';
 import { ParentalLock } from '@/components/shared/ParentalLock';
 import { SoundToggle } from '@/components/shared/SoundToggle';
 import { ParentalEditorModal } from '@/components/termometro/ParentalEditorModal';
@@ -40,7 +40,7 @@ export default function TermometroPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F0F9FF]">
-      <MoveKitHeader
+      <GuiaMoveHeader
         title="Termômetro Sensorial"
         backHref={activeZone ? undefined : '/'}
         rightSlot={

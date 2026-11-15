@@ -1,5 +1,5 @@
 {
-  "name": "movekit",
+  "name": "guiamove",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "4.3.3",
+    "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@types/node": "^20",

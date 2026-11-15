@@ -4,19 +4,19 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import type { ReactNode } from 'react';
 
-interface MoveKitHeaderProps {
+interface GuiaMoveHeaderProps {
   title?: string;
   subtitle?: string;
   backHref?: string;
   rightSlot?: ReactNode;
 }
 
-export function MoveKitHeader({
+export function GuiaMoveHeader({
   title,
   subtitle,
   backHref,
   rightSlot,
-}: MoveKitHeaderProps) {
+}: GuiaMoveHeaderProps) {
   return (
     <header className="w-full border-b border-[#BAE6FD] bg-white/95 backdrop-blur-sm sticky top-0 z-30">
       <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
@@ -37,8 +37,8 @@ export function MoveKitHeader({
               </h1>
             ) : (
               <div className="flex items-baseline gap-1 font-bold text-xl sm:text-2xl tracking-tight">
-                <span className="text-[#0F172A]">Move</span>
-                <span className="text-[#0284C7]">Kit</span>
+                <span className="text-[#0F172A]">Guia</span>
+                <span className="text-[#0284C7]">Move</span>
               </div>
             )}
             {subtitle ? (

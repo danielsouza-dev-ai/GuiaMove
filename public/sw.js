@@ -1,4 +1,4 @@
-const CACHE_NAME = 'movekit-wave1-v1';
+const CACHE_NAME = 'guiamove-wave1-v1';
 const APP_SHELL = ['/', '/temporizador', '/termometro'];
 
 self.addEventListener('install', (event) => {

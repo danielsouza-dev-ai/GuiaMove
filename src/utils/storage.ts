@@ -13,10 +13,10 @@ export interface ChildProfile {
   createdAt: number;
 }
 
-const DB_NAME = 'movekit-db';
+const DB_NAME = 'guiamove-db';
 const DB_VERSION = 1;
 const STORE_NAME = 'profiles';
-const PROFILES_FALLBACK_KEY = 'movekit_profiles_fallback_v1';
+const PROFILES_FALLBACK_KEY = 'guiamove_profiles_fallback_v1';
 
 export function getLocalJson<T>(key: string, fallback: T): T {
   if (typeof window === 'undefined') return fallback;

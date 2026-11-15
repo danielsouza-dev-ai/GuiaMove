@@ -1,14 +1,14 @@
-# Design Spec: MoveKit (`@dansouza.move`)
+# Design Spec: GuiaMove (`@dansouza.move`)
 
 **Data:** 2026-11-15  
 **Autor:** Daniel Souza (`@dansouza.move`) + Antigravity  
-**Workspace:** `c:\Python\build-pages\MoveKit`
+**Workspace:** `c:\Python\build-pages\GuiaMove`
 
 ---
 
 ## 1. Intenção e Porquê
 
-O **MoveKit** é um portal web único, gratuito e instalável (PWA) que reúne ferramentas práticas de rotina, regulação sensorial, desenvolvimento motor e cognitivo para crianças autistas (e típicas).
+O **GuiaMove** é um portal web único, gratuito e instalável (PWA) que reúne ferramentas práticas de rotina, regulação sensorial, desenvolvimento motor e cognitivo para crianças autistas (e típicas).
 
 O projeto resolve dois objetivos conectados:
 1. **Utilidade real para famílias e terapeutas:** resolver gargalos do dia a dia em casa ou na rua sem paywalls, sem necessidade de login e sem excesso de estímulos visuais.
@@ -22,7 +22,7 @@ O projeto resolve dois objetivos conectados:
 - Portal único hospedado gratuitamente na Vercel (plano Hobby), acessível em um só endereço e instalável via PWA ("Adicionar à tela inicial") com funcionamento offline.
 - Lançamento em **ondas incrementais**, permitindo publicar o portal rápido e lançar novas ferramentas em sincronia com conteúdos no Instagram.
 - **Onda 1 (MVP de lançamento):**
-  1. **Hub MoveKit (`/`)** com identidade visual **Céu & Clareza** e assinatura `@dansouza.move`.
+  1. **Hub GuiaMove (`/`)** com identidade visual **Céu & Clareza** e assinatura `@dansouza.move`.
   2. **Temporizador Visual (`/temporizador`)**, migrado de `C:\Python\build-pages\Temporizador` para React, já adaptado à paleta oficial e com ajustes visuais solicitados (posição do boneco e ilustração da batata).
   3. **Termômetro Sensorial e de Emoções (`/termometro`)** interativo, com estratégias de regulação configuráveis pelos pais.
 
@@ -55,7 +55,7 @@ O projeto resolve dois objetivos conectados:
 
 ## 4. Abordagens Consideradas
 
-Durante a análise do projeto existente em `C:\Python\build-pages\Temporizador`, constatou-se que o Temporizador atual foi construído em **HTML, CSS e JavaScript puros** (`src/app.js`, `timer.js`, `avatar.js`, `audio.js`, `chips.js`, `cropper.js`, `grid.js`, `storage.js`, `sw.js`). Foram avaliadas duas abordagens para o MoveKit:
+Durante a análise do projeto existente em `C:\Python\build-pages\Temporizador`, constatou-se que o Temporizador atual foi construído em **HTML, CSS e JavaScript puros** (`src/app.js`, `timer.js`, `avatar.js`, `audio.js`, `chips.js`, `cropper.js`, `grid.js`, `storage.js`, `sw.js`). Foram avaliadas duas abordagens para o GuiaMove:
 
 1. **Abordagem A — Next.js (App Router) + React + Tailwind CSS (Escolhida)**
    - **Como funciona:** Projeto único em Next.js com rotas isoladas por ferramenta (`/`, `/temporizador`, `/termometro`) e pasta `components/shared/` para elementos reutilizáveis (botões grandes acessíveis, trava parental, controle de som, navegação limpa) + PWA único.
@@ -74,7 +74,7 @@ Durante a análise do projeto existente em `C:\Python\build-pages\Temporizador`,
 ```text
 src/
 ├── app/
-│   ├── page.tsx                 # Hub MoveKit (cards grandes + assinatura @dansouza.move)
+│   ├── page.tsx                 # Hub GuiaMove (cards grandes + assinatura @dansouza.move)
 │   ├── temporizador/page.tsx    # Temporizador migrado e ajustado
 │   └── termometro/page.tsx      # Termômetro Sensorial e de Emoções
 ├── components/
@@ -86,8 +86,8 @@ src/
 ```
 
 ### Detalhamento da Onda 1
-1. **Hub MoveKit (`/`):**
-   - Cabeçalho limpo com nome **MoveKit** na paleta Céu & Clareza e subtítulo *"Ferramentas gratuitas de rotina, autonomia e movimento por @dansouza.move"*.
+1. **Hub GuiaMove (`/`):**
+   - Cabeçalho limpo com nome **GuiaMove** na paleta Céu & Clareza e subtítulo *"Ferramentas gratuitas de rotina, autonomia e movimento por @dansouza.move"*.
    - Grid de cards grandes, fáceis de tocar no celular, dando acesso ao **Temporizador** e ao **Termômetro Sensorial**.
    - Manifesto PWA configurado para instalação em tela inicial e uso offline das rotas da Onda 1.
 
@@ -123,7 +123,7 @@ src/
 
 ## 6. O que fica a cargo do implementador
 
-- Inicialização do projeto Next.js (App Router), TypeScript, Tailwind CSS e configuração de PWA (ex.: `manifest.ts` / Service Worker) em `c:\Python\build-pages\MoveKit`.
+- Inicialização do projeto Next.js (App Router), TypeScript, Tailwind CSS e configuração de PWA (ex.: `manifest.ts` / Service Worker) em `c:\Python\build-pages\GuiaMove`.
 - Escolha exata das bibliotecas de apoio da Onda 1 (ex.: ícones `lucide-react`, utilitário de PWA compatível com Next.js App Router).
 - Detalhes visuais do componente de respiração guiada, sons de feedback (Web Audio API ou áudios leves) e mecânica exata da trava parental (ex.: segurar por 2 segundos ou conta simples).
 - Organização da suíte de testes automatizados equivalente aos cenários atuais do Temporizador.

@@ -23,7 +23,7 @@ describe('Termômetro Sensorial e de Emoções', () => {
 
   it('supports custom parent text strategy saved in localStorage and safe SpeechSynthesis fallback', () => {
     localStorage.setItem(
-      'movekit_termometro_config_v1',
+      'guiamove_termometro_config_v1',
       JSON.stringify({
         red: {
           type: 'custom_text',

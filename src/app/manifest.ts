@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "MoveKit — @dansouza.move",
-    short_name: "MoveKit",
+    name: "GuiaMove — @dansouza.move",
+    short_name: "GuiaMove",
     description:
       "Ferramentas gratuitas de rotina, autonomia e movimento por @dansouza.move",
     start_url: "/",

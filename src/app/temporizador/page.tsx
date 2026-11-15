@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Play, Plus, Trash2 } from 'lucide-react';
-import { MoveKitHeader } from '@/components/shared/MoveKitHeader';
+import { GuiaMoveHeader } from '@/components/shared/GuiaMoveHeader';
 import { SoundToggle } from '@/components/shared/SoundToggle';
 import { BigActionButton } from '@/components/shared/BigActionButton';
 import { CharacterAvatar } from '@/components/temporizador/CharacterAvatar';
@@ -157,7 +157,7 @@ export default function TemporizadorPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F0F9FF]">
-      <MoveKitHeader
+      <GuiaMoveHeader
         title="Temporizador Visual"
         backHref={runningScreen ? undefined : '/'}
         rightSlot={<SoundToggle muted={muted} onToggle={handleToggleMute} />}

@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, fireEvent, render, screen } from '@testing-library/react';
-import { MoveKitHeader } from '@/components/shared/MoveKitHeader';
+import { GuiaMoveHeader } from '@/components/shared/GuiaMoveHeader';
 import { ParentalLock } from '@/components/shared/ParentalLock';
 
 describe('shared components', () => {
@@ -59,8 +59,8 @@ describe('shared components', () => {
     expect(onUnlock).not.toHaveBeenCalled();
   });
 
-  it('MoveKitHeader renders back link when backHref is provided', () => {
-    render(<MoveKitHeader title="Temporizador" backHref="/" />);
+  it('GuiaMoveHeader renders back link when backHref is provided', () => {
+    render(<GuiaMoveHeader title="Temporizador" backHref="/" />);
     const link = screen.getByRole('link', { name: /voltar/i });
     expect(link).toHaveAttribute('href', '/');
     expect(screen.getByText('Temporizador')).toBeInTheDocument();

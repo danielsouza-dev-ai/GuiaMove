@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import { ArrowRight, Clock, Layers, Sparkles, Thermometer } from 'lucide-react';
-import { MoveKitHeader } from '@/components/shared/MoveKitHeader';
+import { GuiaMoveHeader } from '@/components/shared/GuiaMoveHeader';
 
 export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col bg-[#F0F9FF]">
-      <MoveKitHeader subtitle="Ferramentas gratuitas de rotina, autonomia e movimento por @dansouza.move" />
+      <GuiaMoveHeader subtitle="Ferramentas gratuitas de rotina, autonomia e movimento por @dansouza.move" />
 
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-8 flex flex-col gap-8">
         <section className="rounded-3xl bg-white border border-[#BAE6FD] p-6 sm:p-8 shadow-xs">
@@ -99,7 +99,7 @@ export default function HomePage() {
       </main>
 
       <footer className="py-5 text-center text-xs text-[#64748B] border-t border-[#BAE6FD]/60 bg-white/60">
-        MoveKit por <span className="font-semibold text-[#0F172A]">@dansouza.move</span> · Acadêmico de Fisioterapia, ABA e IA
+        GuiaMove por <span className="font-semibold text-[#0F172A]">@dansouza.move</span> · Acadêmico de Fisioterapia, ABA e IA
       </footer>
     </div>
   );

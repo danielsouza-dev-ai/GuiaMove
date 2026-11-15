@@ -1,14 +1,14 @@
-# MoveKit Onda 1 Implementation Plan
+# GuiaMove Onda 1 Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Construir a Onda 1 do portal PWA **MoveKit** (`/` Hub, `/temporizador` migrado e corrigido, `/termometro` Sensorial e de Emoções) em Next.js App Router + React + Tailwind CSS, 100% client-side e pronto para deploy gratuito na Vercel.
+**Goal:** Construir a Onda 1 do portal PWA **GuiaMove** (`/` Hub, `/temporizador` migrado e corrigido, `/termometro` Sensorial e de Emoções) em Next.js App Router + React + Tailwind CSS, 100% client-side e pronto para deploy gratuito na Vercel.
 
-**Architecture:** Aplicação Next.js (App Router) com rotas isoladas por ferramenta, componentes compartilhados (`MoveKitHeader`, `ParentalLock`, `SoundToggle`, `BigActionButton`), persistência local em `src/utils/storage.ts` (`IndexedDB` com fallback para `localStorage`) e assets em SVG modular sem moldura transparente. O botão de iniciar do `/temporizador` executa transição e contagem de forma síncrona/não-bloqueante para funcionar no iPad Safari.
+**Architecture:** Aplicação Next.js (App Router) com rotas isoladas por ferramenta, componentes compartilhados (`GuiaMoveHeader`, `ParentalLock`, `SoundToggle`, `BigActionButton`), persistência local em `src/utils/storage.ts` (`IndexedDB` com fallback para `localStorage`) e assets em SVG modular sem moldura transparente. O botão de iniciar do `/temporizador` executa transição e contagem de forma síncrona/não-bloqueante para funcionar no iPad Safari.
 
 **Tech Stack:** Next.js 15+ (App Router), React 19, TypeScript, Tailwind CSS, `lucide-react`, Vitest + `@testing-library/react` + `jsdom`.
 
-**Spec:** `docs/superpowers/specs/2026-11-15-movekit-design.md`
+**Spec:** `docs/superpowers/specs/2026-11-15-guiamove-design.md`
 
 ## Global Constraints
 
@@ -40,7 +40,7 @@
 
 - [ ] **Step 1: Inicializar projeto Next.js + dependências**
 
-Executar na raiz `c:\Python\build-pages\MoveKit`:
+Executar na raiz `c:\Python\build-pages\GuiaMove`:
 ```bash
 npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias "@/*" --yes
 npm install lucide-react
@@ -57,7 +57,7 @@ Definir variáveis CSS da paleta oficial, `background-color: #F0F9FF`, `color: #
 
 - [ ] **Step 4: Criar `src/app/manifest.ts` e ícones SVG em `public/icons/`**
 
-Configurar PWA com `name: "MoveKit — @dansouza.move"`, `short_name: "MoveKit"`, `display: "standalone"`, `theme_color: "#0284C7"`, `background_color: "#F0F9FF"`.
+Configurar PWA com `name: "GuiaMove — @dansouza.move"`, `short_name: "GuiaMove"`, `display: "standalone"`, `theme_color: "#0284C7"`, `background_color: "#F0F9FF"`.
 
 - [ ] **Step 5: Verificar build e runner de testes**
 
@@ -69,7 +69,7 @@ Expected: `npm run build` conclui sem erros; `vitest` executa (0 testes ou smoke
 ```bash
 git init
 git add .
-git commit -m "chore: bootstrap Next.js MoveKit with Ceu e Clareza palette and PWA manifest"
+git commit -m "chore: bootstrap Next.js GuiaMove with Ceu e Clareza palette and PWA manifest"
 ```
 
 ---
@@ -104,7 +104,7 @@ Expected: FAIL ("Cannot find module '@/utils/storage'").
 
 - [ ] **Step 3: Implementar `src/utils/storage.ts`**
 
-Implementar store `movekit-db` (`profiles` objectStore) em `IndexedDB` com fallback automático e transparente para `localStorage` caso `indexedDB` lance erro ou não exista (ex.: navegação privada no Safari).
+Implementar store `guiamove-db` (`profiles` objectStore) em `IndexedDB` com fallback automático e transparente para `localStorage` caso `indexedDB` lance erro ou não exista (ex.: navegação privada no Safari).
 
 - [ ] **Step 4: Rodar testes para verificar aprovação**
 
@@ -123,7 +123,7 @@ git commit -m "feat: add local storage and IndexedDB persistence layer with Safa
 ### Task 3: Componentes Compartilhados (`src/components/shared/`)
 
 **Files:**
-- Create: `src/components/shared/MoveKitHeader.tsx`
+- Create: `src/components/shared/GuiaMoveHeader.tsx`
 - Create: `src/components/shared/SoundToggle.tsx`
 - Create: `src/components/shared/ParentalLock.tsx`
 - Create: `src/components/shared/BigActionButton.tsx`
@@ -132,7 +132,7 @@ git commit -m "feat: add local storage and IndexedDB persistence layer with Safa
 **Interfaces:**
 - Consumes: `getLocalJson`, `setLocalJson` de `@/utils/storage`
 - Produces:
-  - `MoveKitHeader({ title?: string; backHref?: string; rightSlot?: React.ReactNode })`
+  - `GuiaMoveHeader({ title?: string; backHref?: string; rightSlot?: React.ReactNode })`
   - `SoundToggle({ muted: boolean; onToggle: () => void })`
   - `ParentalLock({ onUnlock: () => void; label?: string; holdMs?: number })` (default `holdMs = 2000`)
   - `BigActionButton({ children, onClick, variant?: 'primary' | 'amber' | 'outline', className?: string })`
@@ -143,7 +143,7 @@ Testar com `vi.useFakeTimers()`:
 1. `ParentalLock` NÃO chama `onUnlock` se `pointerup` acontecer após `1000ms` (antes dos `2000ms`).
 2. `ParentalLock` chama `onUnlock` após `2000ms` de pressão contínua (`pointerdown` + `advanceTimersByTime(2000)`).
 3. `ParentalLock` cancela o timer se `pointercancel` disparar no meio.
-4. `MoveKitHeader` renderiza link de retorno quando `backHref` é passado.
+4. `GuiaMoveHeader` renderiza link de retorno quando `backHref` é passado.
 
 - [ ] **Step 2: Rodar testes para confirmar falha**
 
@@ -168,19 +168,19 @@ git commit -m "feat: add shared accessible UI components and ParentalLock"
 
 ---
 
-### Task 4: Hub MoveKit (`src/app/page.tsx`)
+### Task 4: Hub GuiaMove (`src/app/page.tsx`)
 
 **Files:**
 - Create: `src/app/page.tsx`
 - Test: `tests/hub.test.tsx`
 
 **Interfaces:**
-- Consumes: `MoveKitHeader` de `@/components/shared/MoveKitHeader`
-- Produces: Rota `/` com marca `MoveKit`, subtítulo `@dansouza.move` e cards grandes clicáveis para `/temporizador` e `/termometro` (+ cards informativos "Em breve" para Sequenciamento e Rotinas ARASAAC sem poluição visual).
+- Consumes: `GuiaMoveHeader` de `@/components/shared/GuiaMoveHeader`
+- Produces: Rota `/` com marca `GuiaMove`, subtítulo `@dansouza.move` e cards grandes clicáveis para `/temporizador` e `/termometro` (+ cards informativos "Em breve" para Sequenciamento e Rotinas ARASAAC sem poluição visual).
 
 - [ ] **Step 1: Escrever teste falhando em `tests/hub.test.tsx`**
 
-Verificar que a página inicial renderiza o título `MoveKit`, a assinatura `@dansouza.move`, link para `/temporizador` e link para `/termometro`.
+Verificar que a página inicial renderiza o título `GuiaMove`, a assinatura `@dansouza.move`, link para `/temporizador` e link para `/termometro`.
 
 - [ ] **Step 2: Rodar teste para confirmar falha**
 
@@ -200,7 +200,7 @@ Expected: PASS.
 
 ```bash
 git add src/app/page.tsx tests/hub.test.tsx
-git commit -m "feat: build MoveKit Hub home page with Ceu e Clareza design"
+git commit -m "feat: build GuiaMove Hub home page with Ceu e Clareza design"
 ```
 
 ---
@@ -302,7 +302,7 @@ git commit -m "feat: add customizable modular SVG character, wavy potato chip, a
 - Test: `tests/temporizadorPage.test.tsx`
 
 **Interfaces:**
-- Consumes: `MoveKitHeader`, `SoundToggle`, `ParentalLock`, `BigActionButton`, `storage.ts`, `timerEngine.ts`, `soundEngine.ts`, `CharacterAvatar`, `WavyChipSvg`, `ChocolateRewardSvg`
+- Consumes: `GuiaMoveHeader`, `SoundToggle`, `ParentalLock`, `BigActionButton`, `storage.ts`, `timerEngine.ts`, `soundEngine.ts`, `CharacterAvatar`, `WavyChipSvg`, `ChocolateRewardSvg`
 - Produces: Rota `/temporizador` completa.
   - Posicionamento no `TimerStage`: margem esquerda mínima garantida (`paddingLeft >= avatarWidth`) para nunca cortar na 1ª coluna; deslocamento horizontal dinâmico (`biteOffset = chipProgress * (chipWidth * 0.65)`) fazendo o boneco avançar conforme a batata diminui.
   - Botão **Iniciar Temporizador**: dispara `soundEngine.init()`, `requestFullscreen` e `wakeLock` de forma **não-bloqueante** (`try/catch`, sem `await` antes da troca de tela), garantindo execução imediata no iPad Safari.
@@ -347,14 +347,14 @@ git commit -m "feat: migrate Temporizador to Next.js with Ceu e Clareza palette 
 - Test: `tests/termometro.test.tsx`
 
 **Interfaces:**
-- Consumes: `MoveKitHeader`, `SoundToggle`, `ParentalLock`, `BigActionButton`, `getLocalJson`, `setLocalJson`
+- Consumes: `GuiaMoveHeader`, `SoundToggle`, `ParentalLock`, `BigActionButton`, `getLocalJson`, `setLocalJson`
 - Produces:
   - 4 zonas padrão **Zones of Regulation** (`blue`, `green`, `yellow`, `red`) com cores acessíveis, expressões simples e 1 estratégia principal configurável por zona:
     - `'breathing'` (Respiração Guiada com círculo animado CSS 4s-4s-4s)
     - `'calm_sound'` (Som Ambiente Suave gerado localmente via Web Audio API — ruído rosa/chuva filtrada)
     - `'pause_button'` (Botão Gigante de "Preciso de Pausa" com confirmação visual)
     - `'custom_text'` (Cartão de Regulação com ícone escolhido + texto dos pais + leitura opcional via `window.speechSynthesis` em `pt-BR`)
-  - Chave no `localStorage`: `'movekit_termometro_config_v1'`.
+  - Chave no `localStorage`: `'guiamove_termometro_config_v1'`.
 
 - [ ] **Step 1: Escrever testes falhando em `tests/termometro.test.tsx`**
 

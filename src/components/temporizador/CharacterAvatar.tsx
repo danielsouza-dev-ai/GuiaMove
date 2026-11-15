@@ -167,7 +167,7 @@ export function CharacterAvatar({
       {photoData ? (
         <g>
           <defs>
-            <clipPath id="movekit-avatar-clip">
+            <clipPath id="guiamove-avatar-clip">
               <circle cx="52" cy="44" r="26" />
             </clipPath>
           </defs>
@@ -178,7 +178,7 @@ export function CharacterAvatar({
             width="52"
             height="52"
             preserveAspectRatio="xMidYMid slice"
-            clipPath="url(#movekit-avatar-clip)"
+            clipPath="url(#guiamove-avatar-clip)"
           />
         </g>
       ) : (

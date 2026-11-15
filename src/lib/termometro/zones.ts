@@ -25,7 +25,7 @@ export interface ZoneDefinition {
   emoji: string;
 }
 
-export const TERMOMETRO_STORAGE_KEY = 'movekit_termometro_config_v1';
+export const TERMOMETRO_STORAGE_KEY = 'guiamove_termometro_config_v1';
 
 export const ZONES: ZoneDefinition[] = [
   {

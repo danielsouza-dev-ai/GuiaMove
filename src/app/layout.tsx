@@ -15,13 +15,13 @@ const fredoka = Fredoka({
 });
 
 export const metadata: Metadata = {
-  title: "MoveKit — Ferramentas de Rotina e Autonomia | @dansouza.move",
+  title: "GuiaMove — Ferramentas de Rotina e Autonomia | @dansouza.move",
   description:
     "Ferramentas gratuitas de rotina, autonomia e movimento por @dansouza.move",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "MoveKit",
+    title: "GuiaMove",
   },
 };
 
