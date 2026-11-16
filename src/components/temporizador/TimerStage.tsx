@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Pause, Play, RotateCcw } from 'lucide-react';
+import { Lock, Pause, Play, RotateCcw } from 'lucide-react';
 import type { TimerSnapshot } from '@/lib/temporizador/timerEngine';
 import type { ChildProfile } from '@/utils/storage';
 import { CharacterAvatar } from './CharacterAvatar';
@@ -35,6 +35,7 @@ export function TimerStage({
   const stageRef = useRef<HTMLDivElement | null>(null);
   const [stageWidth, setStageWidth] = useState(640);
   const [controlsUnlocked, setControlsUnlocked] = useState(false);
+  const [holdingLock, setHoldingLock] = useState(false);
 
   useEffect(() => {
     const update = () => {
@@ -50,24 +51,45 @@ export function TimerStage({
   const avatarSize = stageWidth < 480 ? 68 : 88;
   const chipSize = stageWidth < 480 ? 52 : 64;
   const gap = 14;
-  const safeLeftPadding = avatarSize + 12;
-  const usableWidth = Math.max(chipSize + gap, stageWidth - safeLeftPadding - 16);
-  const cols = Math.max(1, Math.min(6, Math.floor(usableWidth / (chipSize + gap))));
+  const topPadding = 24;
+
+  const maxCols = Math.max(
+    1,
+    Math.min(6, Math.floor((stageWidth - avatarSize - 24) / (chipSize + gap))),
+  );
+  const cols = Math.max(1, Math.min(maxCols, snapshot.totalChips));
+  const gridWidth = cols * chipSize + (cols - 1) * gap;
+  const gridLeft = Math.max(
+    Math.round(avatarSize * 0.72),
+    Math.round((stageWidth - gridWidth) / 2),
+  );
 
   const activeCol = snapshot.activeChipIndex % cols;
   const activeRow = Math.floor(snapshot.activeChipIndex / cols);
 
-  const chipLeft = safeLeftPadding + activeCol * (chipSize + gap);
-  const chipTop = 16 + activeRow * (chipSize + gap);
+  const chipLeft = gridLeft + activeCol * (chipSize + gap);
+  const chipTop = topPadding + activeRow * (chipSize + gap);
 
-  // Progressive approach: character advances toward remaining edge of chip as bites increase
+  // Anchor avatar's mouth (x ~ 86% of avatarSize, y ~ 55% of avatarSize) right against the chip's remaining edge
   const biteOffset =
     snapshot.status === 'approaching'
       ? 0
-      : Math.round(snapshot.chipProgress * chipSize * 0.55);
+      : Math.round(snapshot.chipProgress * chipSize * 0.65);
 
-  const avatarLeft = Math.max(0, chipLeft - avatarSize + 10 + biteOffset);
-  const avatarTop = Math.max(0, chipTop + (chipSize - avatarSize) / 2);
+  const avatarLeft = Math.max(
+    0,
+    Math.round(chipLeft + chipSize * 0.14 - avatarSize * 0.86 + biteOffset),
+  );
+  const avatarTop = Math.max(
+    4,
+    Math.round(chipTop + chipSize * 0.5 - avatarSize * 0.55),
+  );
+
+  useEffect(() => {
+    if (!stageRef.current || typeof stageRef.current.scrollTo !== 'function') return;
+    const targetTop = Math.max(0, chipTop - 80);
+    stageRef.current.scrollTo({ top: targetTop, behavior: 'smooth' });
+  }, [activeRow, chipTop]);
 
   if (snapshot.status === 'finished') {
     return (
@@ -124,10 +146,14 @@ export function TimerStage({
         {!controlsUnlocked ? (
           <ParentalLock
             label="Pausar / Sair"
-            onUnlock={() => setControlsUnlocked(true)}
+            onHoldingChange={setHoldingLock}
+            onUnlock={() => {
+              setHoldingLock(false);
+              setControlsUnlocked(true);
+            }}
           />
         ) : (
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-end gap-2">
             {snapshot.status === 'paused' ? (
               <button
                 type="button"
@@ -154,20 +180,40 @@ export function TimerStage({
             >
               Sair
             </button>
+            <button
+              type="button"
+              onClick={() => setControlsUnlocked(false)}
+              className="inline-flex items-center gap-1.5 px-3.5 h-11 rounded-2xl border border-[#BAE6FD] bg-[#F0F9FF] text-[#0284C7] font-bold text-sm"
+            >
+              <Lock className="w-4 h-4" />
+              <span>Bloquear</span>
+            </button>
           </div>
         )}
       </div>
 
+      {holdingLock && !controlsUnlocked ? (
+        <div
+          role="status"
+          className="rounded-2xl bg-[#E0F2FE] border-2 border-[#0284C7] px-4 py-2.5 text-center text-sm font-bold text-[#0F172A]"
+        >
+          Continue segurando por 2 segundos para liberar Pausar / Sair...
+        </div>
+      ) : null}
+
       {/* Food & Character Stage */}
       <div
         ref={stageRef}
-        className="relative flex-1 min-h-[340px] rounded-3xl bg-white border-2 border-[#BAE6FD] overflow-hidden p-4"
+        className="relative flex-1 min-h-[340px] max-h-[65vh] rounded-3xl bg-white border-2 border-[#BAE6FD] overflow-y-auto overflow-x-hidden"
       >
         <div
+          data-testid="chips-grid"
           className="grid"
           style={{
-            paddingLeft: `${safeLeftPadding}px`,
-            paddingTop: '16px',
+            marginLeft: `${gridLeft}px`,
+            width: `${gridWidth}px`,
+            paddingTop: `${topPadding}px`,
+            paddingBottom: `${topPadding}px`,
             gridTemplateColumns: `repeat(${cols}, ${chipSize}px)`,
             gap: `${gap}px`,
           }}

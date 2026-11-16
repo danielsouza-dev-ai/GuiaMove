@@ -45,4 +45,42 @@ describe('Temporizador page (iPad Safari & positioning)', () => {
     );
     expect(progressedLeft).toBeGreaterThan(initialLeft);
   });
+
+  it('shows mobile holding instruction on Pausar / Sair and allows re-locking controls', () => {
+    render(<TemporizadorPage />);
+    fireEvent.click(screen.getByRole('button', { name: /iniciar/i }));
+
+    const lockBtn = screen.getByRole('button', { name: /pausar \/ sair/i });
+    fireEvent.pointerDown(lockBtn);
+
+    expect(
+      screen.getByText(/continue segurando por 2 segundos/i),
+    ).toBeInTheDocument();
+
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
+
+    const relockBtn = screen.getByRole('button', { name: /bloquear/i });
+    expect(relockBtn).toBeInTheDocument();
+
+    fireEvent.click(relockBtn);
+    expect(
+      screen.getByRole('button', { name: /pausar \/ sair/i }),
+    ).toBeInTheDocument();
+  });
+
+  it('supports free time selection from 10 seconds to 60 minutes', () => {
+    render(<TemporizadorPage />);
+
+    const minsInput = screen.getByLabelText(/^minutos$/i);
+    const secsInput = screen.getByLabelText(/^segundos$/i);
+
+    fireEvent.change(minsInput, { target: { value: '0' } });
+    fireEvent.change(secsInput, { target: { value: '5' } });
+    expect(screen.getByTestId('selected-duration-badge')).toHaveTextContent('00:10');
+
+    fireEvent.change(minsInput, { target: { value: '60' } });
+    expect(screen.getByTestId('selected-duration-badge')).toHaveTextContent('60:00');
+  });
 });

@@ -33,13 +33,26 @@ const DEFAULT_PROFILE: ChildProfile = {
 };
 
 const DURATION_OPTIONS = [
+  { label: '10 seg', seconds: 10 },
   { label: '30 seg', seconds: 30 },
   { label: '1 min', seconds: 60 },
-  { label: '2 min', seconds: 120 },
   { label: '3 min', seconds: 180 },
   { label: '5 min', seconds: 300 },
   { label: '10 min', seconds: 600 },
+  { label: '30 min', seconds: 1800 },
+  { label: '60 min', seconds: 3600 },
 ];
+
+function clampDuration(seconds: number): number {
+  if (!Number.isFinite(seconds)) return 60;
+  return Math.min(3600, Math.max(10, Math.round(seconds)));
+}
+
+function formatDurationDisplay(totalSeconds: number): string {
+  const m = Math.floor(totalSeconds / 60);
+  const s = totalSeconds % 60;
+  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
 
 export default function TemporizadorPage() {
   const [profiles, setProfiles] = useState<ChildProfile[]>([DEFAULT_PROFILE]);
@@ -238,10 +251,19 @@ export default function TemporizadorPage() {
 
           {/* Time selector */}
           <section className="rounded-3xl bg-white border border-[#BAE6FD] p-5 sm:p-6">
-            <h2 className="text-lg font-bold text-[#0F172A] mb-4">
-              2. Escolha o tempo
-            </h2>
-            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2.5">
+            <div className="flex items-center justify-between gap-3 mb-4">
+              <h2 className="text-lg font-bold text-[#0F172A]">
+                2. Escolha o tempo
+              </h2>
+              <span
+                data-testid="selected-duration-badge"
+                className="px-3.5 py-1 rounded-xl bg-[#F0F9FF] border border-[#BAE6FD] font-bold text-lg text-[#0284C7] tabular-nums"
+              >
+                {formatDurationDisplay(selectedSeconds)}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-4 sm:grid-cols-8 gap-2 mb-5">
               {DURATION_OPTIONS.map((opt) => {
                 const active = selectedSeconds === opt.seconds;
                 return (
@@ -249,7 +271,7 @@ export default function TemporizadorPage() {
                     key={opt.seconds}
                     type="button"
                     onClick={() => setSelectedSeconds(opt.seconds)}
-                    className={`h-14 rounded-2xl font-bold text-sm sm:text-base border-2 transition touch-manipulation ${
+                    className={`h-12 rounded-2xl font-bold text-xs sm:text-sm border-2 transition touch-manipulation ${
                       active
                         ? 'bg-[#0284C7] text-white border-[#0284C7]'
                         : 'bg-[#F0F9FF] text-[#0F172A] border-[#BAE6FD] hover:border-[#0284C7]'
@@ -259,6 +281,59 @@ export default function TemporizadorPage() {
                   </button>
                 );
               })}
+            </div>
+
+            <div className="rounded-2xl bg-[#F0F9FF] border border-[#BAE6FD] p-4 flex flex-col gap-3">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <span className="text-sm font-semibold text-[#0F172A]">
+                  Tempo livre (10 seg a 60 min)
+                </span>
+                <div className="flex items-center gap-2">
+                  <label className="flex items-center gap-1.5 text-sm font-semibold text-[#475569]">
+                    <input
+                      type="number"
+                      aria-label="Minutos"
+                      min={0}
+                      max={60}
+                      value={Math.floor(selectedSeconds / 60)}
+                      onChange={(e) => {
+                        const mins = Math.max(0, Math.min(60, Number(e.target.value) || 0));
+                        const secs = mins === 60 ? 0 : selectedSeconds % 60;
+                        setSelectedSeconds(clampDuration(mins * 60 + secs));
+                      }}
+                      className="w-16 h-10 rounded-xl border border-[#BAE6FD] bg-white px-2 text-center font-bold text-[#0F172A] tabular-nums"
+                    />
+                    <span>min</span>
+                  </label>
+                  <label className="flex items-center gap-1.5 text-sm font-semibold text-[#475569]">
+                    <input
+                      type="number"
+                      aria-label="Segundos"
+                      min={0}
+                      max={59}
+                      value={selectedSeconds % 60}
+                      onChange={(e) => {
+                        const mins = Math.floor(selectedSeconds / 60);
+                        const secs = Math.max(0, Math.min(59, Number(e.target.value) || 0));
+                        setSelectedSeconds(clampDuration(mins * 60 + secs));
+                      }}
+                      className="w-16 h-10 rounded-xl border border-[#BAE6FD] bg-white px-2 text-center font-bold text-[#0F172A] tabular-nums"
+                    />
+                    <span>seg</span>
+                  </label>
+                </div>
+              </div>
+
+              <input
+                type="range"
+                aria-label="Ajustar tempo em segundos"
+                min={10}
+                max={3600}
+                step={10}
+                value={selectedSeconds}
+                onChange={(e) => setSelectedSeconds(clampDuration(Number(e.target.value)))}
+                className="w-full accent-[#0284C7] cursor-pointer"
+              />
             </div>
           </section>
 

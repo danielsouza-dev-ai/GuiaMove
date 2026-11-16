@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 
 interface ParentalLockProps {
   onUnlock: () => void;
+  onHoldingChange?: (holding: boolean) => void;
   label?: string;
   holdMs?: number;
   className?: string;
@@ -12,6 +13,7 @@ interface ParentalLockProps {
 
 export function ParentalLock({
   onUnlock,
+  onHoldingChange,
   label = 'Área dos pais',
   holdMs = 2000,
   className = '',
@@ -25,6 +27,7 @@ export function ParentalLock({
       timerRef.current = null;
     }
     setHolding(false);
+    onHoldingChange?.(false);
   };
 
   useEffect(() => {
@@ -36,9 +39,11 @@ export function ParentalLock({
   const handlePointerDown = () => {
     clearHold();
     setHolding(true);
+    onHoldingChange?.(true);
     timerRef.current = setTimeout(() => {
       timerRef.current = null;
       setHolding(false);
+      onHoldingChange?.(false);
       onUnlock();
     }, holdMs);
   };

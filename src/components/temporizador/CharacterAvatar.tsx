@@ -98,22 +98,22 @@ export function CharacterAvatar({
     if (hairStyle === 'long') {
       return (
         <g fill={hairColor}>
-          <path d="M22 44 C22 14, 78 14, 78 36 L78 28 C66 20, 36 22, 28 38 L24 72 C18 66, 18 54, 22 44 Z" />
+          <path d="M22 44 C22 4, 78 4, 80 34 C68 27, 42 27, 30 40 L26 74 C18 72, 18 56, 22 44 Z" />
         </g>
       );
     }
     if (hairStyle === 'bun') {
       return (
         <g fill={hairColor}>
-          <circle cx="32" cy="14" r="11" />
-          <path d="M24 40 C24 18, 76 16, 78 34 C66 24, 38 24, 24 40 Z" />
+          <circle cx="28" cy="18" r="11" />
+          <path d="M23 42 C23 4, 79 4, 80 34 C68 27, 42 26, 23 42 Z" />
         </g>
       );
     }
     // short
     return (
       <path
-        d="M24 38 C24 16, 78 16, 80 34 C68 26, 40 26, 24 38 Z"
+        d="M23 42 C23 4, 79 4, 80 34 C68 27, 42 26, 23 42 Z"
         fill={hairColor}
       />
     );
