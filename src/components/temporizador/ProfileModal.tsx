@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import type { AvatarConfig, ChildProfile } from '@/utils/storage';
 import { CharacterAvatar } from './CharacterAvatar';
@@ -80,23 +80,36 @@ export function ProfileModal({
     });
   };
 
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [onClose]);
+
   return (
-    <div className="fixed inset-0 z-50 bg-[#0F172A]/40 backdrop-blur-xs flex items-center justify-center p-4">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="profile-modal-title"
+      className="fixed inset-0 z-50 bg-[#0F172A]/40 backdrop-blur-xs flex items-center justify-center p-4"
+    >
       <form
         onSubmit={handleSubmit}
-        className="bg-white border-2 border-[#BAE6FD] rounded-3xl max-w-md w-full p-6 flex flex-col gap-5 max-h-[90vh] overflow-y-auto"
+        className="bg-white border-2 border-[#BAE6FD] rounded-3xl max-w-md w-full p-6 flex flex-col gap-5 max-h-[90dvh] overflow-y-auto"
       >
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-[#0F172A]">
+          <h2 id="profile-modal-title" className="text-xl font-bold text-[#0F172A] text-balance">
             Personalizar Perfil
           </h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Fechar"
-            className="w-10 h-10 rounded-xl bg-[#F0F9FF] flex items-center justify-center text-[#0F172A]"
+            className="size-10 rounded-xl bg-[#F0F9FF] flex items-center justify-center text-[#0F172A]"
           >
-            <X className="w-5 h-5" />
+            <X className="size-5" aria-hidden="true" />
           </button>
         </div>
 

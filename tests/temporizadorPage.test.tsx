@@ -32,16 +32,21 @@ describe('Temporizador page (iPad Safari & positioning)', () => {
     render(<TemporizadorPage />);
     fireEvent.click(screen.getByRole('button', { name: /iniciar/i }));
 
+    const parseTranslateX = (transform: string) => {
+      const match = /translate3d\(([^,]+)px/.exec(transform);
+      return match ? parseFloat(match[1]) : 0;
+    };
+
     const avatarWrapper = screen.getByTestId('stage-avatar-wrapper');
-    const initialLeft = parseFloat(avatarWrapper.style.left || '0');
+    const initialLeft = parseTranslateX(avatarWrapper.style.transform || '');
     expect(initialLeft).toBeGreaterThanOrEqual(0);
 
     // Advance past 1s approach + 5s of eating
     act(() => {
       vi.advanceTimersByTime(6000);
     });
-    const progressedLeft = parseFloat(
-      screen.getByTestId('stage-avatar-wrapper').style.left || '0',
+    const progressedLeft = parseTranslateX(
+      screen.getByTestId('stage-avatar-wrapper').style.transform || '',
     );
     expect(progressedLeft).toBeGreaterThan(initialLeft);
   });

@@ -18,6 +18,25 @@ export const metadata: Metadata = {
   title: "GuiaMove — Ferramentas de Rotina e Autonomia | @dansouza.move",
   description:
     "Ferramentas gratuitas de rotina, autonomia e movimento por @dansouza.move",
+  applicationName: "GuiaMove",
+  openGraph: {
+    type: "website",
+    locale: "pt_BR",
+    title: "GuiaMove — Ferramentas de Rotina e Autonomia",
+    description:
+      "Temporizador visual e termômetro sensorial gratuitos para rotina em casa e na clínica. Sem cadastro, direto no navegador.",
+    siteName: "GuiaMove",
+  },
+  twitter: {
+    card: "summary",
+    title: "GuiaMove — Ferramentas de Rotina e Autonomia",
+    description:
+      "Temporizador visual e termômetro sensorial gratuitos para rotina em casa e na clínica.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",

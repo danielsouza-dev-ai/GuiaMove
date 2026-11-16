@@ -1,19 +1,14 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { CheckCircle2, Volume2 } from 'lucide-react';
 import {
-  CheckCircle2,
-  Droplets,
-  Hand,
-  Headphones,
-  Heart,
-  Volume2,
-  Wind,
-} from 'lucide-react';
-import type {
-  StrategyIcon,
-  ZoneDefinition,
-  ZoneStrategyConfig,
+  ARASAAC_ICON_PATHS,
+  CALMING_MOVEMENTS,
+  type CalmingMovementType,
+  type StrategyIcon,
+  type ZoneDefinition,
+  type ZoneStrategyConfig,
 } from '@/lib/termometro/zones';
 import { BigActionButton } from '@/components/shared/BigActionButton';
 
@@ -24,20 +19,33 @@ interface RegulationViewProps {
   onBack: () => void;
 }
 
-function renderStrategyIcon(icon: StrategyIcon = 'heart', color: string) {
-  const props = { className: 'w-12 h-12', style: { color } };
-  switch (icon) {
-    case 'water':
-      return <Droplets {...props} />;
-    case 'headphones':
-      return <Headphones {...props} />;
-    case 'hand':
-      return <Hand {...props} />;
-    case 'wind':
-      return <Wind {...props} />;
-    default:
-      return <Heart {...props} />;
-  }
+function isCalmingMovement(type: ZoneStrategyConfig['type']): type is CalmingMovementType {
+  return (
+    type === 'butterfly_tapping' ||
+    type === 'twist_and_sway' ||
+    type === 'arm_swings'
+  );
+}
+
+function ArasaacPictogram({
+  icon,
+  alt = '',
+  size = 72,
+}: {
+  icon: StrategyIcon;
+  alt?: string;
+  size?: number;
+}) {
+  const src = ARASAAC_ICON_PATHS[icon] ?? ARASAAC_ICON_PATHS.abracar;
+  return (
+    <img
+      src={src}
+      alt={alt}
+      width={size}
+      height={size}
+      className="object-contain select-none"
+    />
+  );
 }
 
 export function RegulationView({
@@ -48,6 +56,9 @@ export function RegulationView({
 }: RegulationViewProps) {
   const [pauseConfirmed, setPauseConfirmed] = useState(false);
   const [soundPlaying, setSoundPlaying] = useState(false);
+  const [activeMovement, setActiveMovement] = useState<CalmingMovementType>(
+    isCalmingMovement(strategy.type) ? strategy.type : 'butterfly_tapping',
+  );
   const audioCtxRef = useRef<AudioContext | null>(null);
   const sourceRef = useRef<AudioBufferSourceNode | null>(null);
 
@@ -158,19 +169,18 @@ export function RegulationView({
         {strategy.type === 'breathing' ? (
           <div className="flex flex-col items-center gap-6 py-4">
             <div
-              className="w-36 h-36 rounded-full flex items-center justify-center animate-breathe"
+              className="w-36 h-36 rounded-full flex items-center justify-center animate-breathe bg-white"
               style={{
-                backgroundColor: zone.badgeBg,
                 border: `4px solid ${zone.borderHex}`,
               }}
             >
-              <Wind className="w-12 h-12" style={{ color: zone.borderHex }} />
+              <ArasaacPictogram icon="respirar" size={88} />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-[#0F172A]">
+              <h2 className="text-2xl font-bold text-[#0F172A] text-balance">
                 Respire junto com o círculo
               </h2>
-              <p className="mt-1 text-base text-[#475569]">
+              <p className="mt-1 text-base text-[#475569] text-pretty">
                 Puxe o ar devagar quando crescer. Solte quando diminuir.
               </p>
             </div>
@@ -180,19 +190,16 @@ export function RegulationView({
         {strategy.type === 'calm_sound' ? (
           <div className="flex flex-col items-center gap-5 py-4">
             <div
-              className="w-24 h-24 rounded-3xl flex items-center justify-center"
-              style={{ backgroundColor: zone.badgeBg }}
+              className="size-24 rounded-3xl bg-white border-2 flex items-center justify-center p-2"
+              style={{ borderColor: zone.borderHex }}
             >
-              <Headphones
-                className="w-12 h-12"
-                style={{ color: zone.borderHex }}
-              />
+              <ArasaacPictogram icon="fone" size={76} />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-[#0F172A]">
+              <h2 className="text-2xl font-bold text-[#0F172A] text-balance">
                 Som suave de chuva
               </h2>
-              <p className="mt-1 text-base text-[#475569]">
+              <p className="mt-1 text-base text-[#475569] text-pretty">
                 Um som contínuo para diminuir o barulho ao redor.
               </p>
             </div>
@@ -200,7 +207,7 @@ export function RegulationView({
               onClick={isPlaying ? stopCalmAudio : startCalmAudio}
               variant={isPlaying ? 'amber' : 'primary'}
             >
-              <Volume2 className="w-5 h-5" />
+              <Volume2 className="w-5 h-5" aria-hidden="true" />
               <span>{isPlaying ? 'Pausar som' : 'Tocar som suave'}</span>
             </BigActionButton>
           </div>
@@ -211,36 +218,104 @@ export function RegulationView({
             <button
               type="button"
               onClick={() => setPauseConfirmed(true)}
-              className="w-full max-w-xs min-h-[140px] rounded-3xl border-4 flex flex-col items-center justify-center gap-3 p-6 active:scale-95 transition touch-manipulation"
+              className="w-full max-w-xs min-h-[150px] rounded-3xl border-4 flex flex-col items-center justify-center gap-3 p-6 active:scale-95 transition touch-manipulation"
               style={{
-                backgroundColor: pauseConfirmed ? '#ECFDF5' : zone.badgeBg,
+                backgroundColor: pauseConfirmed ? '#ECFDF5' : '#FFFFFF',
                 borderColor: pauseConfirmed ? '#10B981' : zone.borderHex,
               }}
             >
               {pauseConfirmed ? (
-                <CheckCircle2 className="w-14 h-14 text-[#10B981]" />
+                <CheckCircle2 className="w-14 h-14 text-[#10B981]" aria-hidden="true" />
               ) : (
-                <Hand className="w-14 h-14" style={{ color: zone.borderHex }} />
+                <ArasaacPictogram icon="parar" size={76} />
               )}
               <span className="text-2xl font-bold text-[#0F172A]">
                 {pauseConfirmed ? 'Pausa combinada!' : 'PRECISO DE PAUSA'}
               </span>
             </button>
-            <p className="text-base text-[#475569]">
+            <p className="text-base text-[#475569] text-pretty">
               Mostre esta tela para quem está com você. Tudo bem parar um pouco.
             </p>
+          </div>
+        ) : null}
+
+        {isCalmingMovement(strategy.type) ? (
+          <div className="flex flex-col items-center gap-5 py-2 w-full">
+            <div
+              className="size-28 rounded-3xl bg-white border-2 flex items-center justify-center p-2"
+              style={{ borderColor: zone.borderHex }}
+            >
+              <ArasaacPictogram
+                icon={CALMING_MOVEMENTS[activeMovement].icon}
+                size={92}
+              />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-[#0F172A] text-balance">
+                {CALMING_MOVEMENTS[activeMovement].title}
+              </h2>
+              <p className="mt-1.5 text-base text-[#475569] max-w-md text-pretty">
+                {CALMING_MOVEMENTS[activeMovement].instruction}
+              </p>
+            </div>
+            <BigActionButton
+              variant="outline"
+              onClick={() =>
+                handleSpeakText(
+                  `${CALMING_MOVEMENTS[activeMovement].title}. ${CALMING_MOVEMENTS[activeMovement].instruction}`,
+                )
+              }
+            >
+              <Volume2 className="w-5 h-5 text-[#0284C7]" aria-hidden="true" />
+              <span>Ouvir instrução</span>
+            </BigActionButton>
+
+            <div className="w-full pt-2 border-t border-[#BAE6FD]/60 flex flex-col gap-2">
+              <span className="text-xs font-semibold text-[#475569]">
+                Outros movimentos calmantes:
+              </span>
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                {(Object.keys(CALMING_MOVEMENTS) as CalmingMovementType[]).map(
+                  (movKey) => {
+                    const mov = CALMING_MOVEMENTS[movKey];
+                    const isActive = activeMovement === movKey;
+                    return (
+                      <button
+                        key={movKey}
+                        type="button"
+                        onClick={() => setActiveMovement(movKey)}
+                        className={`inline-flex items-center gap-2 px-3 py-2 rounded-2xl text-xs font-bold border transition ${
+                          isActive
+                            ? 'bg-[#0284C7] text-white border-[#0284C7]'
+                            : 'bg-[#F0F9FF] text-[#0F172A] border-[#BAE6FD] hover:border-[#0284C7]'
+                        }`}
+                      >
+                        <img
+                          src={ARASAAC_ICON_PATHS[mov.icon]}
+                          alt=""
+                          width={24}
+                          height={24}
+                          className="rounded-md bg-white p-0.5 object-contain"
+                        />
+                        <span>{mov.title}</span>
+                      </button>
+                    );
+                  },
+                )}
+              </div>
+            </div>
           </div>
         ) : null}
 
         {strategy.type === 'custom_text' ? (
           <div className="flex flex-col items-center gap-5 py-2 w-full">
             <div
-              className="w-24 h-24 rounded-3xl flex items-center justify-center"
-              style={{ backgroundColor: zone.badgeBg }}
+              className="size-24 rounded-3xl bg-white border-2 flex items-center justify-center p-2"
+              style={{ borderColor: zone.borderHex }}
             >
-              {renderStrategyIcon(strategy.icon, zone.borderHex)}
+              <ArasaacPictogram icon={strategy.icon ?? 'abracar'} size={76} />
             </div>
-            <p className="text-2xl sm:text-3xl font-bold text-[#0F172A] leading-snug max-w-md">
+            <p className="text-2xl sm:text-3xl font-bold text-[#0F172A] leading-snug max-w-md text-pretty">
               {strategy.text || 'Fazer uma pausa tranquila'}
             </p>
             <BigActionButton
@@ -249,7 +324,7 @@ export function RegulationView({
                 handleSpeakText(strategy.text || 'Fazer uma pausa tranquila')
               }
             >
-              <Volume2 className="w-5 h-5 text-[#0284C7]" />
+              <Volume2 className="w-5 h-5 text-[#0284C7]" aria-hidden="true" />
               <span>Ouvir em voz alta</span>
             </BigActionButton>
           </div>

@@ -39,7 +39,7 @@ export default function TermometroPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F0F9FF]">
+    <div className="min-h-dvh flex flex-col bg-[#F0F9FF]">
       <GuiaMoveHeader
         title="Termômetro Sensorial"
         backHref={activeZone ? undefined : '/'}
@@ -105,6 +105,19 @@ export default function TermometroPage() {
           onClose={() => setEditorOpen(false)}
         />
       ) : null}
+
+      <footer className="py-3 px-4 text-center text-xs text-[#475569]">
+        Pictogramas:{' '}
+        <a
+          href="https://arasaac.org"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline hover:text-[#0F172A]"
+        >
+          ARASAAC
+        </a>{' '}
+        · Autor: Sergio Palao · Gobierno de Aragón · CC BY-NC-SA 4.0
+      </footer>
     </div>
   );
 }

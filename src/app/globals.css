@@ -21,7 +21,13 @@ body {
   background-color: var(--bg-sky);
   color: var(--text-ink);
   font-family: var(--font-outfit), system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
   -webkit-tap-highlight-color: transparent;
+}
+
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--accent-blue);
+  outline-offset: 3px;
 }
 
 @keyframes breathe-circle {
@@ -35,4 +41,10 @@ body {
 
 .animate-breathe {
   animation: breathe-circle 10s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-breathe {
+    animation: none;
+  }
 }

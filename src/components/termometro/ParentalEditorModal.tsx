@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import {
+  ARASAAC_ICON_PATHS,
   ZONES,
   type StrategyIcon,
   type StrategyType,
@@ -21,15 +22,21 @@ const STRATEGY_OPTIONS: Array<{ id: StrategyType; label: string }> = [
   { id: 'breathing', label: 'Respiração Guiada' },
   { id: 'calm_sound', label: 'Som Suave' },
   { id: 'pause_button', label: 'Botão de Pausa' },
+  { id: 'butterfly_tapping', label: 'Abraço da Borboleta' },
+  { id: 'twist_and_sway', label: 'Girar e Balançar' },
+  { id: 'arm_swings', label: 'Balanço dos Braços' },
   { id: 'custom_text', label: 'Texto dos Pais' },
 ];
 
 const ICON_OPTIONS: Array<{ id: StrategyIcon; label: string }> = [
-  { id: 'heart', label: 'Abraço' },
-  { id: 'water', label: 'Água' },
-  { id: 'headphones', label: 'Fone' },
-  { id: 'hand', label: 'Pausa' },
-  { id: 'wind', label: 'Respirar' },
+  { id: 'abracar', label: 'Abraço' },
+  { id: 'beber-agua', label: 'Água' },
+  { id: 'fone', label: 'Fone' },
+  { id: 'parar', label: 'Pausa' },
+  { id: 'respirar', label: 'Respirar' },
+  { id: 'borboleta', label: 'Borboleta' },
+  { id: 'girar', label: 'Girar' },
+  { id: 'levantar-bracos', label: 'Braços' },
 ];
 
 export function ParentalEditorModal({
@@ -49,15 +56,28 @@ export function ParentalEditorModal({
     }));
   };
 
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [onClose]);
+
   return (
-    <div className="fixed inset-0 z-50 bg-[#0F172A]/40 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white border-2 border-[#BAE6FD] rounded-3xl max-w-xl w-full p-6 flex flex-col gap-5 max-h-[90vh] overflow-y-auto">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="parental-editor-title"
+      className="fixed inset-0 z-50 bg-[#0F172A]/40 backdrop-blur-xs flex items-center justify-center p-4"
+    >
+      <div className="bg-white border-2 border-[#BAE6FD] rounded-3xl max-w-xl w-full p-6 flex flex-col gap-5 max-h-[90dvh] overflow-y-auto">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold text-[#0F172A]">
+            <h2 id="parental-editor-title" className="text-xl font-bold text-[#0F172A] text-balance">
               Configurar Estratégias
             </h2>
-            <p className="text-xs text-[#475569]">
+            <p className="text-xs text-[#475569] text-pretty">
               Escolha o que abre direto quando a criança toca em cada zona.
             </p>
           </div>
@@ -65,9 +85,9 @@ export function ParentalEditorModal({
             type="button"
             onClick={onClose}
             aria-label="Fechar"
-            className="w-10 h-10 rounded-xl bg-[#F0F9FF] flex items-center justify-center text-[#0F172A]"
+            className="size-10 rounded-xl bg-[#F0F9FF] flex items-center justify-center text-[#0F172A]"
           >
-            <X className="w-5 h-5" />
+            <X className="size-5" aria-hidden="true" />
           </button>
         </div>
 
@@ -118,13 +138,20 @@ export function ParentalEditorModal({
                           key={ic.id}
                           type="button"
                           onClick={() => updateZone(zone.id, { icon: ic.id })}
-                          className={`px-3 py-1 rounded-lg text-xs font-semibold border ${
-                            (current.icon ?? 'heart') === ic.id
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold border ${
+                            (current.icon ?? 'abracar') === ic.id
                               ? 'bg-[#F59E0B] text-[#0F172A] border-[#F59E0B]'
                               : 'bg-white text-[#475569] border-[#BAE6FD]'
                           }`}
                         >
-                          {ic.label}
+                          <img
+                            src={ARASAAC_ICON_PATHS[ic.id]}
+                            alt=""
+                            width={18}
+                            height={18}
+                            className="rounded-xs bg-white object-contain"
+                          />
+                          <span>{ic.label}</span>
                         </button>
                       ))}
                     </div>

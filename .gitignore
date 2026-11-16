@@ -41,3 +41,11 @@ yarn-error.log*
 next-env.d.ts
 
 .superpowers/
+
+# AI agent local skills & lock
+.agents/
+.agent/
+skills-lock.json
+
+# Windows
+Thumbs.db

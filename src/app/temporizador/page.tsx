@@ -169,7 +169,7 @@ export default function TemporizadorPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F0F9FF]">
+    <div className="min-h-dvh flex flex-col bg-[#F0F9FF]">
       <GuiaMoveHeader
         title="Temporizador Visual"
         backHref={runningScreen ? undefined : '/'}

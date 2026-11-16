@@ -4,15 +4,48 @@ export type StrategyType =
   | 'breathing'
   | 'calm_sound'
   | 'pause_button'
+  | 'butterfly_tapping'
+  | 'twist_and_sway'
+  | 'arm_swings'
   | 'custom_text';
 
-export type StrategyIcon = 'heart' | 'water' | 'headphones' | 'hand' | 'wind';
+export type StrategyIcon =
+  | 'respirar'
+  | 'fone'
+  | 'parar'
+  | 'abracar'
+  | 'beber-agua'
+  | 'borboleta'
+  | 'girar'
+  | 'levantar-bracos'
+  // Legacy aliases kept for backward compatibility with saved localStorage configs
+  | 'heart'
+  | 'water'
+  | 'headphones'
+  | 'hand'
+  | 'wind';
 
 export interface ZoneStrategyConfig {
   type: StrategyType;
   icon?: StrategyIcon;
   text?: string;
 }
+
+export const ARASAAC_ICON_PATHS: Record<StrategyIcon, string> = {
+  respirar: '/arasaac/respirar.png',
+  fone: '/arasaac/fone.png',
+  parar: '/arasaac/parar.png',
+  abracar: '/arasaac/abracar.png',
+  'beber-agua': '/arasaac/beber-agua.png',
+  borboleta: '/arasaac/borboleta.png',
+  girar: '/arasaac/girar.png',
+  'levantar-bracos': '/arasaac/levantar-bracos.png',
+  heart: '/arasaac/abracar.png',
+  water: '/arasaac/beber-agua.png',
+  headphones: '/arasaac/fone.png',
+  hand: '/arasaac/parar.png',
+  wind: '/arasaac/respirar.png',
+};
 
 export interface ZoneDefinition {
   id: ZoneId;
@@ -70,9 +103,42 @@ export const ZONES: ZoneDefinition[] = [
   },
 ];
 
+export type CalmingMovementType =
+  | 'butterfly_tapping'
+  | 'twist_and_sway'
+  | 'arm_swings';
+
+export const CALMING_MOVEMENTS: Record<
+  CalmingMovementType,
+  {
+    title: string;
+    instruction: string;
+    icon: StrategyIcon;
+  }
+> = {
+  butterfly_tapping: {
+    title: 'Abraço da Borboleta',
+    instruction:
+      'Cruze os braços sobre o peito e dê batidinhas leves, alternando um lado e depois o outro.',
+    icon: 'borboleta',
+  },
+  twist_and_sway: {
+    title: 'Girar e Balançar',
+    instruction:
+      'Cruze os braços no peito e gire o tronco devagar de um lado para o outro, como um balanço.',
+    icon: 'girar',
+  },
+  arm_swings: {
+    title: 'Balanço dos Braços',
+    instruction:
+      'Levante os dois braços lá no alto e balance para cima e para baixo, no seu ritmo.',
+    icon: 'levantar-bracos',
+  },
+};
+
 export const DEFAULT_ZONE_STRATEGIES: Record<ZoneId, ZoneStrategyConfig> = {
-  blue: { type: 'calm_sound', icon: 'headphones' },
-  green: { type: 'breathing', icon: 'wind' },
-  yellow: { type: 'breathing', icon: 'wind' },
-  red: { type: 'pause_button', icon: 'hand' },
+  blue: { type: 'calm_sound', icon: 'fone' },
+  green: { type: 'breathing', icon: 'respirar' },
+  yellow: { type: 'butterfly_tapping', icon: 'borboleta' },
+  red: { type: 'pause_button', icon: 'parar' },
 };

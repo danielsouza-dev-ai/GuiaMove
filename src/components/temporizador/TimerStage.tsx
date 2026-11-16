@@ -252,16 +252,17 @@ export function TimerStage({
           })}
         </div>
 
-        {/* Moving character anchored by mouth to active chip */}
+        {/* Moving character anchored by mouth to active chip (compositor-only transform) */}
         <div
           data-testid="stage-avatar-wrapper"
           style={{
             position: 'absolute',
-            left: `${avatarLeft}px`,
-            top: `${avatarTop}px`,
+            left: 0,
+            top: 0,
+            transform: `translate3d(${avatarLeft}px, ${avatarTop}px, 0)`,
             width: `${avatarSize}px`,
             height: `${avatarSize}px`,
-            transition: 'left 250ms ease-out, top 300ms ease-out',
+            transition: 'transform 250ms ease-out',
             pointerEvents: 'none',
           }}
         >

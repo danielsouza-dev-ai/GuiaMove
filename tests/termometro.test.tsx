@@ -43,4 +43,24 @@ describe('Termômetro Sensorial e de Emoções', () => {
     const listenBtn = screen.getByRole('button', { name: /ouvir/i });
     expect(() => fireEvent.click(listenBtn)).not.toThrow();
   });
+
+  it('opens calming movements from the Reel with ARASAAC pictograms and allows switching between all 3 movements', () => {
+    render(<TermometroPage />);
+    expect(screen.getByText(/ARASAAC/i)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /amarelo/i }));
+    expect(
+      screen.getByRole('heading', { name: /abraço da borboleta/i }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /girar e balançar/i }));
+    expect(
+      screen.getByRole('heading', { name: /girar e balançar/i }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /balanço dos braços/i }));
+    expect(
+      screen.getByRole('heading', { name: /balanço dos braços/i }),
+    ).toBeInTheDocument();
+  });
 });
