@@ -5,7 +5,7 @@ import { Lock, Pause, Play, RotateCcw } from 'lucide-react';
 import type { TimerSnapshot } from '@/lib/temporizador/timerEngine';
 import type { ChildProfile } from '@/utils/storage';
 import { CharacterAvatar } from './CharacterAvatar';
-import { ChocolateRewardSvg, WavyChipSvg } from './FoodSprites';
+import { ChipCrumbsSvg, ChocolateRewardSvg, WavyChipSvg } from './FoodSprites';
 import { ParentalLock } from '@/components/shared/ParentalLock';
 import { BigActionButton } from '@/components/shared/BigActionButton';
 
@@ -221,6 +221,7 @@ export function TimerStage({
           {Array.from({ length: snapshot.totalChips }).map((_, idx) => {
             const isPast = idx < snapshot.activeChipIndex;
             const isCurrent = idx === snapshot.activeChipIndex;
+            const isLast = idx === snapshot.totalChips - 1;
             const bites = isPast
               ? 10
               : isCurrent
@@ -232,10 +233,20 @@ export function TimerStage({
                 key={idx}
                 style={{ width: chipSize, height: chipSize }}
                 className={`flex items-center justify-center transition-opacity ${
-                  isPast ? 'opacity-15' : 'opacity-100'
+                  isPast ? 'opacity-85' : 'opacity-100'
                 }`}
               >
-                <WavyChipSvg bitesTaken={bites} maxBites={10} size={chipSize} />
+                {isPast ? (
+                  <ChipCrumbsSvg size={chipSize} />
+                ) : isLast ? (
+                  <ChocolateRewardSvg
+                    bitesTaken={bites}
+                    maxBites={10}
+                    size={chipSize}
+                  />
+                ) : (
+                  <WavyChipSvg bitesTaken={bites} maxBites={10} size={chipSize} />
+                )}
               </div>
             );
           })}

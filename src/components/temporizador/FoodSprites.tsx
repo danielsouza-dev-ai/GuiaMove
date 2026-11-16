@@ -69,7 +69,51 @@ export function WavyChipSvg({
   );
 }
 
-export function ChocolateRewardSvg({ size = 120 }: { size?: number }) {
+export function ChipCrumbsSvg({ size = 64 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
+      fill="none"
+      data-testid="chip-crumbs-svg"
+      aria-label="Rastro de migalhas de batata"
+    >
+      <circle
+        cx="50"
+        cy="52"
+        r="28"
+        fill="#FEF3C7"
+        fillOpacity="0.45"
+        stroke="#F59E0B"
+        strokeOpacity="0.4"
+        strokeWidth="2"
+        strokeDasharray="4 4"
+      />
+      <polygon points="34,46 42,42 40,51" fill="#FBBF24" stroke="#B45309" strokeWidth="1.5" />
+      <polygon points="56,38 64,41 59,47" fill="#F59E0B" stroke="#B45309" strokeWidth="1.5" />
+      <polygon points="48,58 57,55 54,64" fill="#FBBF24" stroke="#B45309" strokeWidth="1.5" />
+      <circle cx="38" cy="61" r="3" fill="#D97706" />
+      <circle cx="64" cy="56" r="2.5" fill="#B45309" />
+      <circle cx="48" cy="44" r="2" fill="#D97706" />
+    </svg>
+  );
+}
+
+interface ChocolateRewardSvgProps {
+  size?: number;
+  bitesTaken?: number;
+  maxBites?: number;
+}
+
+export function ChocolateRewardSvg({
+  size = 120,
+  bitesTaken = 0,
+  maxBites = 10,
+}: ChocolateRewardSvgProps) {
+  const ratioLeft = Math.max(0, 1 - bitesTaken / maxBites);
+  const clipX = (1 - ratioLeft) * 72 + 24;
+
   return (
     <svg
       width={size}
@@ -77,8 +121,15 @@ export function ChocolateRewardSvg({ size = 120 }: { size?: number }) {
       viewBox="0 0 120 120"
       fill="none"
       data-testid="chocolate-reward-svg"
+      data-bites={bitesTaken}
       aria-label="Barra de chocolate de recompensa"
     >
+      <defs>
+        <clipPath id={`choc-bite-${bitesTaken}-${maxBites}`}>
+          <rect x={clipX} y="0" width={120 - clipX} height="64" />
+        </clipPath>
+      </defs>
+
       {/* Wrapper */}
       <path
         d="M22 60 L98 60 L102 104 L18 104 Z"
@@ -95,22 +146,24 @@ export function ChocolateRewardSvg({ size = 120 }: { size?: number }) {
         strokeLinejoin="round"
       />
       {/* Chocolate squares */}
-      <rect
-        x="26"
-        y="16"
-        width="68"
-        height="44"
-        rx="6"
-        fill="#6B3A1E"
-        stroke="#0F172A"
-        strokeWidth="3"
-      />
-      <line x1="60" y1="16" x2="60" y2="60" stroke="#4A2511" strokeWidth="3" />
-      <line x1="26" y1="38" x2="94" y2="38" stroke="#4A2511" strokeWidth="3" />
-      <rect x="31" y="21" width="24" height="12" rx="2" fill="#8B512D" />
-      <rect x="65" y="21" width="24" height="12" rx="2" fill="#8B512D" />
-      <rect x="31" y="43" width="24" height="12" rx="2" fill="#8B512D" />
-      <rect x="65" y="43" width="24" height="12" rx="2" fill="#8B512D" />
+      <g clipPath={bitesTaken > 0 ? `url(#choc-bite-${bitesTaken}-${maxBites})` : undefined}>
+        <rect
+          x="26"
+          y="16"
+          width="68"
+          height="44"
+          rx="6"
+          fill="#6B3A1E"
+          stroke="#0F172A"
+          strokeWidth="3"
+        />
+        <line x1="60" y1="16" x2="60" y2="60" stroke="#4A2511" strokeWidth="3" />
+        <line x1="26" y1="38" x2="94" y2="38" stroke="#4A2511" strokeWidth="3" />
+        <rect x="31" y="21" width="24" height="12" rx="2" fill="#8B512D" />
+        <rect x="65" y="21" width="24" height="12" rx="2" fill="#8B512D" />
+        <rect x="31" y="43" width="24" height="12" rx="2" fill="#8B512D" />
+        <rect x="65" y="43" width="24" height="12" rx="2" fill="#8B512D" />
+      </g>
     </svg>
   );
 }

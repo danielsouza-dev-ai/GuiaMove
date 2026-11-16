@@ -83,4 +83,29 @@ describe('Temporizador page (iPad Safari & positioning)', () => {
     fireEvent.change(minsInput, { target: { value: '60' } });
     expect(screen.getByTestId('selected-duration-badge')).toHaveTextContent('60:00');
   });
+
+  it('renders chocolate as the last food item, leaves crumb trail on past chips, and handles odd seconds like 59s', () => {
+    render(<TemporizadorPage />);
+
+    const minsInput = screen.getByLabelText(/^minutos$/i);
+    const secsInput = screen.getByLabelText(/^segundos$/i);
+    fireEvent.change(minsInput, { target: { value: '0' } });
+    fireEvent.change(secsInput, { target: { value: '59' } });
+    expect(screen.getByTestId('selected-duration-badge')).toHaveTextContent('00:59');
+
+    fireEvent.click(screen.getByRole('button', { name: /iniciar/i }));
+
+    // 59s -> 6 items: 5 chips + 1 chocolate at the end
+    expect(screen.getAllByTestId('wavy-chip-svg')).toHaveLength(5);
+    expect(screen.getByTestId('chocolate-reward-svg')).toBeInTheDocument();
+
+    // Advance past 1s approach + 10s first chip
+    act(() => {
+      vi.advanceTimersByTime(11000);
+    });
+
+    expect(screen.getByTestId('chip-crumbs-svg')).toBeInTheDocument();
+    expect(screen.getAllByTestId('wavy-chip-svg')).toHaveLength(4);
+    expect(screen.getByTestId('chocolate-reward-svg')).toBeInTheDocument();
+  });
 });
