@@ -42,6 +42,12 @@ export function getArasaacPngUrl(id: number): string {
   return `https://static.arasaac.org/pictograms/${id}/${id}_300.png`;
 }
 
+export function formatZoneHeading(label: string): string {
+  if (label === 'Amarelo') return 'Zona Amarela';
+  if (label === 'Vermelho') return 'Zona Vermelha';
+  return `Zona ${label}`;
+}
+
 export function resolveStrategyIconSrc(strategy: ZoneStrategyConfig): string {
   if (typeof strategy.arasaacId === 'number' && strategy.arasaacId > 0) {
     return getArasaacPngUrl(strategy.arasaacId);

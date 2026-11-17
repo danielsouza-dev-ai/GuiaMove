@@ -5,6 +5,7 @@ import { CheckCircle2, Volume2 } from 'lucide-react';
 import {
   ARASAAC_ICON_PATHS,
   CALMING_MOVEMENTS,
+  formatZoneHeading,
   resolveStrategyIconSrc,
   type CalmingMovementType,
   type StrategyIcon,
@@ -164,7 +165,7 @@ export function RegulationView({
           className="px-4 py-1.5 rounded-full text-sm font-bold"
           style={{ backgroundColor: zone.badgeBg, color: zone.badgeText }}
         >
-          {zone.emoji} Zona {zone.label}
+          {zone.emoji} {formatZoneHeading(zone.label)}
         </span>
 
         {strategy.type === 'breathing' ? (

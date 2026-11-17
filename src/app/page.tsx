@@ -64,7 +64,7 @@ export default function HomePage() {
 
         <section
           aria-label="Ferramentas disponíveis"
-          className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-5"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5"
         >
           {HUB_APPS.map((app) => {
             const IconComponent = app.Icon;
@@ -72,26 +72,26 @@ export default function HomePage() {
               <Link
                 key={app.id}
                 href={app.href}
-                className="group rounded-3xl bg-white border-2 border-b-4 border-[#BAE6FD] hover:border-[#0284C7] p-5 sm:p-6 flex flex-col items-center justify-center text-center gap-3.5 shadow-sm transition duration-150 ease-out active:translate-y-0.5 active:scale-[0.99] touch-manipulation"
+                className="group rounded-3xl bg-white border-2 border-b-4 border-[#BAE6FD] hover:border-[#0284C7] p-4 sm:p-6 flex flex-row sm:flex-col items-center justify-start sm:justify-center text-left sm:text-center gap-4 sm:gap-3.5 shadow-sm transition duration-150 ease-out active:translate-y-0.5 active:scale-[0.99] touch-manipulation"
               >
                 <div
-                  className={`size-20 sm:size-24 rounded-3xl border-2 ${app.iconBg} ${app.iconBorder} ${app.iconColor} flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform duration-150 ease-out`}
+                  className={`size-16 sm:size-24 rounded-2xl sm:rounded-3xl border-2 ${app.iconBg} ${app.iconBorder} ${app.iconColor} flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform duration-150 ease-out`}
                 >
                   {app.customIconSrc ? (
                     <img
                       src={app.customIconSrc}
                       alt=""
-                      className="size-14 sm:size-16 object-contain"
+                      className="size-11 sm:size-16 object-contain"
                     />
                   ) : (
                     <IconComponent
-                      className="size-10 sm:size-11 stroke-[2.2]"
+                      className="size-8 sm:size-11 stroke-[2.2]"
                       aria-hidden="true"
                     />
                   )}
                 </div>
 
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-0.5 sm:gap-1 min-w-0">
                   <h2 className="text-base sm:text-lg font-bold text-[#0F172A] leading-snug text-balance">
                     {app.name}
                   </h2>

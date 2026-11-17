@@ -199,7 +199,7 @@ export default function TemporizadorPage() {
               <button
                 type="button"
                 onClick={() => setModalOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3.5 h-10 rounded-2xl bg-[#F0F9FF] border border-[#BAE6FD] text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE]"
+                className="inline-flex items-center gap-1.5 px-3.5 h-10 rounded-2xl bg-[#F0F9FF] border border-[#BAE6FD] text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE] shrink-0 whitespace-nowrap"
               >
                 <Plus className="w-4 h-4" />
                 <span>Novo perfil</span>

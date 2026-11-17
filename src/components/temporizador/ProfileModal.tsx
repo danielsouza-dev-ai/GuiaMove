@@ -181,7 +181,7 @@ export function ProfileModal({
           <span className="block text-sm font-bold text-[#0F172A] mb-2">
             Cabelo
           </span>
-          <div className="grid grid-cols-4 gap-2 mb-2">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-2">
             {HAIR_STYLES.map((style) => (
               <button
                 key={style.id}

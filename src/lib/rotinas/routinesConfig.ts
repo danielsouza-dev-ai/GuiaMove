@@ -36,19 +36,19 @@ export function getArasaacPictogramUrl(arasaacId: number): string {
 
 export const DEFAULT_CARD_BANK: RoutineCardItem[] = [
   { id: 'banheiro', label: 'Ir ao banheiro', arasaacId: 5921 },
-  { id: 'vaso', label: 'Sentar no vaso', arasaacId: 15927 },
+  { id: 'vaso', label: 'Sentar no vaso', arasaacId: 16709 },
   { id: 'papel', label: 'Passar papel', arasaacId: 37261 },
   { id: 'descarga', label: 'Dar descarga', arasaacId: 10184 },
-  { id: 'vestir', label: 'Vestir a roupa', arasaacId: 6627 },
+  { id: 'vestir', label: 'Vestir a roupa', arasaacId: 37816 },
   { id: 'lavar-maos', label: 'Lavar as mãos', arasaacId: 8975 },
-  { id: 'sabonete', label: 'Passar sabonete', arasaacId: 8094 },
-  { id: 'toalha', label: 'Secar as mãos', arasaacId: 4758 },
+  { id: 'sabonete', label: 'Passar sabonete', arasaacId: 35729 },
+  { id: 'toalha', label: 'Secar as mãos', arasaacId: 2566 },
   { id: 'escovar-dentes', label: 'Escovar os dentes', arasaacId: 6971 },
-  { id: 'banho', label: 'Tomar banho', arasaacId: 6058 },
+  { id: 'banho', label: 'Tomar banho', arasaacId: 26803 },
   { id: 'comer', label: 'Hora de comer', arasaacId: 2349 },
-  { id: 'guardar-brinquedos', label: 'Guardar os brinquedos', arasaacId: 34657 },
-  { id: 'brincar', label: 'Tempo de brincar', arasaacId: 23392 },
-  { id: 'escola', label: 'Ir para a escola', arasaacId: 32446 },
+  { id: 'guardar-brinquedos', label: 'Guardar os brinquedos', arasaacId: 5514 },
+  { id: 'brincar', label: 'Tempo de brincar', arasaacId: 6537 },
+  { id: 'escola', label: 'Ir para a escola', arasaacId: 36473 },
   { id: 'dormir', label: 'Hora de dormir', arasaacId: 6479 },
 ];
 
@@ -114,23 +114,39 @@ export function getDefaultRoutinesData(): RoutinesStorageData {
   };
 }
 
+function syncDefaultCardPictogram(card: RoutineCardItem): RoutineCardItem {
+  const defaultCard = DEFAULT_CARD_BANK.find((c) => c.id === card.id);
+  if (!defaultCard) return card;
+  return { ...card, arasaacId: defaultCard.arasaacId };
+}
+
 export function loadRoutinesData(): RoutinesStorageData {
   const defaults = getDefaultRoutinesData();
   const saved = getLocalJson<Partial<RoutinesStorageData>>(ROTINAS_STORAGE_KEY, {});
-  return {
-    cardBank:
-      Array.isArray(saved.cardBank) && saved.cardBank.length > 0
-        ? saved.cardBank
-        : defaults.cardBank,
-    fixedRoutines:
-      Array.isArray(saved.fixedRoutines) && saved.fixedRoutines.length > 0
-        ? saved.fixedRoutines
-        : defaults.fixedRoutines,
-    firstThen:
-      saved.firstThen?.first && saved.firstThen?.then
-        ? saved.firstThen
-        : defaults.firstThen,
-  };
+  const cardBank =
+    Array.isArray(saved.cardBank) && saved.cardBank.length > 0
+      ? saved.cardBank.map(syncDefaultCardPictogram)
+      : defaults.cardBank;
+
+  const fixedRoutines =
+    Array.isArray(saved.fixedRoutines) && saved.fixedRoutines.length > 0
+      ? saved.fixedRoutines.map((routine) => ({
+          ...routine,
+          steps: Array.isArray(routine.steps)
+            ? routine.steps.map(syncDefaultCardPictogram)
+            : [],
+        }))
+      : defaults.fixedRoutines;
+
+  const firstThen =
+    saved.firstThen?.first && saved.firstThen?.then
+      ? {
+          first: syncDefaultCardPictogram(saved.firstThen.first),
+          then: syncDefaultCardPictogram(saved.firstThen.then),
+        }
+      : defaults.firstThen;
+
+  return { cardBank, fixedRoutines, firstThen };
 }
 
 export function saveRoutinesData(data: RoutinesStorageData): void {

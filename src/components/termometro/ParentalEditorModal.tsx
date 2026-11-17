@@ -5,6 +5,7 @@ import { Search, X } from 'lucide-react';
 import {
   ARASAAC_ICON_PATHS,
   ZONES,
+  formatZoneHeading,
   resolveStrategyIconSrc,
   searchArasaacPictograms,
   type ArasaacSearchResult,
@@ -74,38 +75,39 @@ export function ParentalEditorModal({
       aria-labelledby="parental-editor-title"
       className="fixed inset-0 z-50 bg-[#0F172A]/40 backdrop-blur-xs flex items-center justify-center p-4"
     >
-      <div className="bg-white border-2 border-[#BAE6FD] rounded-3xl max-w-xl w-full p-6 flex flex-col gap-5 max-h-[90dvh] overflow-y-auto">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 id="parental-editor-title" className="text-xl font-bold text-[#0F172A] text-balance">
-              Configurar Estratégias
-            </h2>
-            <p className="text-xs text-[#475569] text-pretty">
-              Escolha o que abre direto quando a criança toca em cada zona.
-            </p>
+      <div className="bg-white border-2 border-[#BAE6FD] rounded-3xl max-w-xl w-full max-h-[90dvh] overflow-hidden flex flex-col">
+        <div className="p-6 overflow-y-auto flex flex-col gap-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 id="parental-editor-title" className="text-xl font-bold text-[#0F172A] text-balance">
+                Configurar Estratégias
+              </h2>
+              <p className="text-xs text-[#475569] text-pretty">
+                Escolha o que abre direto quando a criança toca em cada zona.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Fechar"
+              className="size-10 rounded-xl bg-[#F0F9FF] flex items-center justify-center text-[#0F172A] shrink-0"
+            >
+              <X className="size-5" aria-hidden="true" />
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Fechar"
-            className="size-10 rounded-xl bg-[#F0F9FF] flex items-center justify-center text-[#0F172A]"
-          >
-            <X className="size-5" aria-hidden="true" />
-          </button>
-        </div>
 
-        <div className="flex flex-col gap-4">
-          {ZONES.map((zone) => {
-            const current = draft[zone.id];
-            return (
-              <div
-                key={zone.id}
-                className="rounded-2xl border border-[#BAE6FD] p-4 bg-[#F0F9FF]/50 flex flex-col gap-3"
-              >
-                <div className="flex items-center gap-2 font-bold text-[#0F172A]">
-                  <span>{zone.emoji}</span>
-                  <span>Zona {zone.label}</span>
-                </div>
+          <div className="flex flex-col gap-4">
+            {ZONES.map((zone) => {
+              const current = draft[zone.id];
+              return (
+                <div
+                  key={zone.id}
+                  className="rounded-2xl border border-[#BAE6FD] p-4 bg-[#F0F9FF]/50 flex flex-col gap-3"
+                >
+                  <div className="flex items-center gap-2 font-bold text-[#0F172A]">
+                    <span>{zone.emoji}</span>
+                    <span>{formatZoneHeading(zone.label)}</span>
+                  </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {STRATEGY_OPTIONS.map((opt) => (
@@ -139,6 +141,7 @@ export function ParentalEditorModal({
         <BigActionButton onClick={() => onSave(draft)} className="w-full">
           Salvar estratégias
         </BigActionButton>
+        </div>
       </div>
     </div>
   );
@@ -191,7 +194,7 @@ function ArasaacZonePicker({ zoneLabel, current, onChange }: ArasaacZonePickerPr
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 min-w-0">
         <div className="size-11 rounded-xl bg-white border border-[#BAE6FD] flex items-center justify-center p-1 shrink-0">
           <img
             src={resolveStrategyIconSrc(current)}
@@ -207,7 +210,7 @@ function ArasaacZonePicker({ zoneLabel, current, onChange }: ArasaacZonePickerPr
           value={current.text ?? ''}
           onChange={(e) => onChange({ text: e.target.value })}
           placeholder="Ex.: Abraçar o urso e tomar 3 goles de água"
-          className="flex-1 h-11 px-3 rounded-xl border border-[#BAE6FD] bg-white text-sm text-[#0F172A]"
+          className="flex-1 min-w-0 h-11 px-3 rounded-xl border border-[#BAE6FD] bg-white text-sm text-[#0F172A]"
         />
       </div>
 
@@ -216,7 +219,7 @@ function ArasaacZonePicker({ zoneLabel, current, onChange }: ArasaacZonePickerPr
         <span className="text-xs font-bold text-[#0F172A]">
           Buscar qualquer pictograma na ARASAAC
         </span>
-        <div className="flex gap-2">
+        <div className="flex gap-2 min-w-0">
           <input
             type="search"
             aria-label={`Buscar pictograma ARASAAC para Zona ${zoneLabel}`}
@@ -229,13 +232,13 @@ function ArasaacZonePicker({ zoneLabel, current, onChange }: ArasaacZonePickerPr
               }
             }}
             placeholder="Ex.: urso, bola, música, cobertor..."
-            className="flex-1 h-10 px-3 rounded-xl border border-[#BAE6FD] bg-[#F0F9FF]/50 text-sm text-[#0F172A]"
+            className="flex-1 min-w-0 h-10 px-3 rounded-xl border border-[#BAE6FD] bg-[#F0F9FF]/50 text-sm text-[#0F172A]"
           />
           <button
             type="button"
             onClick={handleSearch}
             disabled={searching || !query.trim()}
-            className="inline-flex items-center gap-1.5 px-3.5 h-10 rounded-xl bg-[#0284C7] text-white text-xs font-bold disabled:opacity-50 cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3.5 h-10 rounded-xl bg-[#0284C7] text-white text-xs font-bold disabled:opacity-50 cursor-pointer shrink-0"
           >
             <Search className="size-3.5" aria-hidden="true" />
             <span>{searching ? 'Buscando...' : 'Buscar'}</span>

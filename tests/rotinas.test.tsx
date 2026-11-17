@@ -1,6 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import RotinasPage from '@/app/rotinas/page';
+import {
+  DEFAULT_CARD_BANK,
+  ROTINAS_STORAGE_KEY,
+  loadRoutinesData,
+} from '@/lib/rotinas/routinesConfig';
 
 describe('Módulo de Rotinas & Primeiro/Depois', () => {
   beforeEach(() => {
@@ -117,5 +122,50 @@ describe('Módulo de Rotinas & Primeiro/Depois', () => {
       'data-done',
       'false',
     );
+  });
+
+  it('uses updated ARASAAC IDs and filters saved cards smoothly in ChildOrderBuilder', () => {
+    const expectedIds: Record<string, number> = {
+      vaso: 16709,
+      vestir: 37816,
+      sabonete: 35729,
+      toalha: 2566,
+      banho: 26803,
+      'guardar-brinquedos': 5514,
+      brincar: 6537,
+      escola: 36473,
+    };
+
+    for (const [id, arasaacId] of Object.entries(expectedIds)) {
+      expect(DEFAULT_CARD_BANK.find((c) => c.id === id)?.arasaacId).toBe(
+        arasaacId,
+      );
+    }
+
+    // Legacy cached IDs in localStorage should auto-sync to updated pictograms
+    localStorage.setItem(
+      ROTINAS_STORAGE_KEY,
+      JSON.stringify({
+        cardBank: [{ id: 'guardar-brinquedos', label: 'Guardar os brinquedos', arasaacId: 34657 }],
+      }),
+    );
+    const synced = loadRoutinesData();
+    expect(synced.cardBank[0].arasaacId).toBe(5514);
+    localStorage.clear();
+
+    render(<RotinasPage />);
+    fireEvent.click(
+      screen.getByRole('button', { name: /criança escolhe a ordem/i }),
+    );
+
+    const filterInput = screen.getByLabelText(/filtrar cartões salvos/i);
+    fireEvent.change(filterInput, { target: { value: 'escola' } });
+
+    expect(
+      screen.getByRole('button', { name: /ir para a escola/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /escovar os dentes/i }),
+    ).not.toBeInTheDocument();
   });
 });

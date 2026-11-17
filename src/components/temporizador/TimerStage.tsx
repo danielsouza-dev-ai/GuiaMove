@@ -60,7 +60,7 @@ export function TimerStage({
   const cols = Math.max(1, Math.min(maxCols, snapshot.totalChips));
   const gridWidth = cols * chipSize + (cols - 1) * gap;
   const gridLeft = Math.max(
-    Math.round(avatarSize * 0.72),
+    Math.round(avatarSize * 0.88),
     Math.round((stageWidth - gridWidth) / 2),
   );
 
@@ -70,7 +70,7 @@ export function TimerStage({
   const chipLeft = gridLeft + activeCol * (chipSize + gap);
   const chipTop = topPadding + activeRow * (chipSize + gap);
 
-  // Anchor avatar's mouth (x ~ 86% of avatarSize, y ~ 55% of avatarSize) right against the chip's remaining edge
+  // Anchor avatar's mouth (x ~ 86% of avatarSize, y ~ 55% of avatarSize) at the chip's left edge without covering it
   const biteOffset =
     snapshot.status === 'approaching'
       ? 0
@@ -78,7 +78,7 @@ export function TimerStage({
 
   const avatarLeft = Math.max(
     0,
-    Math.round(chipLeft + chipSize * 0.14 - avatarSize * 0.86 + biteOffset),
+    Math.round(chipLeft - avatarSize * 0.86 + chipSize * 0.06 + biteOffset),
   );
   const avatarTop = Math.max(
     4,
@@ -135,10 +135,16 @@ export function TimerStage({
       className="flex-1 flex flex-col max-w-4xl w-full mx-auto px-4 py-4 gap-4"
     >
       {/* Top status bar */}
-      <div className="rounded-2xl bg-white border border-[#BAE6FD] px-4 py-3 flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <span className="font-bold text-[#0F172A]">{profile.name}</span>
-          <span className="px-3 py-1 rounded-xl bg-[#F0F9FF] border border-[#BAE6FD] font-bold text-lg text-[#0284C7] tabular-nums">
+      <div
+        className={`rounded-2xl bg-white border border-[#BAE6FD] px-4 py-3 flex justify-between gap-3 ${
+          controlsUnlocked
+            ? 'flex-col sm:flex-row items-stretch sm:items-center'
+            : 'flex-row items-center'
+        }`}
+      >
+        <div className="flex items-center justify-between sm:justify-start gap-3">
+          <span className="font-bold text-[#0F172A] truncate">{profile.name}</span>
+          <span className="px-3 py-1 rounded-xl bg-[#F0F9FF] border border-[#BAE6FD] font-bold text-lg text-[#0284C7] tabular-nums shrink-0">
             {formatClock(snapshot.remainingSeconds)}
           </span>
         </div>
@@ -153,39 +159,39 @@ export function TimerStage({
             }}
           />
         ) : (
-          <div className="flex flex-wrap items-center justify-end gap-2">
+          <div className="grid grid-cols-3 sm:flex sm:flex-wrap items-center justify-end gap-2">
             {snapshot.status === 'paused' ? (
               <button
                 type="button"
                 onClick={onResume}
-                className="inline-flex items-center gap-1.5 px-4 h-11 rounded-2xl bg-[#0284C7] text-white font-bold text-sm"
+                className="inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 h-11 rounded-2xl bg-[#0284C7] text-white font-bold text-xs sm:text-sm"
               >
-                <Play className="w-4 h-4" />
+                <Play className="w-4 h-4 shrink-0" />
                 <span>Retomar</span>
               </button>
             ) : (
               <button
                 type="button"
                 onClick={onPause}
-                className="inline-flex items-center gap-1.5 px-4 h-11 rounded-2xl bg-[#F59E0B] text-[#0F172A] font-bold text-sm"
+                className="inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 h-11 rounded-2xl bg-[#F59E0B] text-[#0F172A] font-bold text-xs sm:text-sm"
               >
-                <Pause className="w-4 h-4" />
+                <Pause className="w-4 h-4 shrink-0" />
                 <span>Pausar</span>
               </button>
             )}
             <button
               type="button"
               onClick={onExit}
-              className="inline-flex items-center px-4 h-11 rounded-2xl border border-[#BAE6FD] bg-white text-[#0F172A] font-bold text-sm"
+              className="inline-flex items-center justify-center px-3 sm:px-4 h-11 rounded-2xl border border-[#BAE6FD] bg-white text-[#0F172A] font-bold text-xs sm:text-sm"
             >
               Sair
             </button>
             <button
               type="button"
               onClick={() => setControlsUnlocked(false)}
-              className="inline-flex items-center gap-1.5 px-3.5 h-11 rounded-2xl border border-[#BAE6FD] bg-[#F0F9FF] text-[#0284C7] font-bold text-sm"
+              className="inline-flex items-center justify-center gap-1.5 px-3 sm:px-3.5 h-11 rounded-2xl border border-[#BAE6FD] bg-[#F0F9FF] text-[#0284C7] font-bold text-xs sm:text-sm"
             >
-              <Lock className="w-4 h-4" />
+              <Lock className="w-4 h-4 shrink-0" />
               <span>Bloquear</span>
             </button>
           </div>
@@ -204,74 +210,76 @@ export function TimerStage({
       {/* Food & Character Stage */}
       <div
         ref={stageRef}
-        className="relative flex-1 min-h-[340px] max-h-[65vh] rounded-3xl bg-white border-2 border-[#BAE6FD] overflow-y-auto overflow-x-hidden"
+        className="relative flex-1 min-h-[280px] max-h-[65vh] rounded-3xl bg-white border-2 border-[#BAE6FD] overflow-y-auto overflow-x-hidden flex flex-col"
       >
-        <div
-          data-testid="chips-grid"
-          className="grid"
-          style={{
-            marginLeft: `${gridLeft}px`,
-            width: `${gridWidth}px`,
-            paddingTop: `${topPadding}px`,
-            paddingBottom: `${topPadding}px`,
-            gridTemplateColumns: `repeat(${cols}, ${chipSize}px)`,
-            gap: `${gap}px`,
-          }}
-        >
-          {Array.from({ length: snapshot.totalChips }).map((_, idx) => {
-            const isPast = idx < snapshot.activeChipIndex;
-            const isCurrent = idx === snapshot.activeChipIndex;
-            const isLast = idx === snapshot.totalChips - 1;
-            const bites = isPast
-              ? 10
-              : isCurrent
-                ? Math.min(10, Math.floor(snapshot.chipProgress * 10))
-                : 0;
+        <div className="relative w-full my-auto">
+          <div
+            data-testid="chips-grid"
+            className="grid"
+            style={{
+              marginLeft: `${gridLeft}px`,
+              width: `${gridWidth}px`,
+              paddingTop: `${topPadding}px`,
+              paddingBottom: `${topPadding}px`,
+              gridTemplateColumns: `repeat(${cols}, ${chipSize}px)`,
+              gap: `${gap}px`,
+            }}
+          >
+            {Array.from({ length: snapshot.totalChips }).map((_, idx) => {
+              const isPast = idx < snapshot.activeChipIndex;
+              const isCurrent = idx === snapshot.activeChipIndex;
+              const isLast = idx === snapshot.totalChips - 1;
+              const bites = isPast
+                ? 10
+                : isCurrent
+                  ? Math.min(10, Math.floor(snapshot.chipProgress * 10))
+                  : 0;
 
-            return (
-              <div
-                key={idx}
-                style={{ width: chipSize, height: chipSize }}
-                className={`flex items-center justify-center transition-opacity ${
-                  isPast ? 'opacity-85' : 'opacity-100'
-                }`}
-              >
-                {isPast ? (
-                  <ChipCrumbsSvg size={chipSize} />
-                ) : isLast ? (
-                  <ChocolateRewardSvg
-                    bitesTaken={bites}
-                    maxBites={10}
-                    size={chipSize}
-                  />
-                ) : (
-                  <WavyChipSvg bitesTaken={bites} maxBites={10} size={chipSize} />
-                )}
-              </div>
-            );
-          })}
-        </div>
+              return (
+                <div
+                  key={idx}
+                  style={{ width: chipSize, height: chipSize }}
+                  className={`flex items-center justify-center transition-opacity ${
+                    isPast ? 'opacity-85' : 'opacity-100'
+                  }`}
+                >
+                  {isPast ? (
+                    <ChipCrumbsSvg size={chipSize} />
+                  ) : isLast ? (
+                    <ChocolateRewardSvg
+                      bitesTaken={bites}
+                      maxBites={10}
+                      size={chipSize}
+                    />
+                  ) : (
+                    <WavyChipSvg bitesTaken={bites} maxBites={10} size={chipSize} />
+                  )}
+                </div>
+              );
+            })}
+          </div>
 
-        {/* Moving character anchored by mouth to active chip (compositor-only transform) */}
-        <div
-          data-testid="stage-avatar-wrapper"
-          style={{
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            transform: `translate3d(${avatarLeft}px, ${avatarTop}px, 0)`,
-            width: `${avatarSize}px`,
-            height: `${avatarSize}px`,
-            transition: 'transform 250ms ease-out',
-            pointerEvents: 'none',
-          }}
-        >
-          <CharacterAvatar
-            phase={snapshot.avatarPhase}
-            config={profile.avatarConfig}
-            photoData={profile.photoData}
-            size={avatarSize}
-          />
+          {/* Moving character anchored by mouth to active chip (compositor-only transform) */}
+          <div
+            data-testid="stage-avatar-wrapper"
+            style={{
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              transform: `translate3d(${avatarLeft}px, ${avatarTop}px, 0)`,
+              width: `${avatarSize}px`,
+              height: `${avatarSize}px`,
+              transition: 'transform 250ms ease-out',
+              pointerEvents: 'none',
+            }}
+          >
+            <CharacterAvatar
+              phase={snapshot.avatarPhase}
+              config={profile.avatarConfig}
+              photoData={profile.photoData}
+              size={avatarSize}
+            />
+          </div>
         </div>
       </div>
     </div>

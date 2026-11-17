@@ -204,7 +204,7 @@ export function FirstThenBoard({
             <button
               type="button"
               onClick={() => setEditingSlot('first')}
-              className={`px-4 h-10 rounded-xl text-sm font-bold border cursor-pointer ${
+              className={`px-3 py-1.5 min-h-10 rounded-xl text-sm font-bold border cursor-pointer text-left ${
                 editingSlot === 'first'
                   ? 'bg-[#0284C7] text-white border-[#0284C7]'
                   : 'bg-[#F0F9FF] text-[#0F172A] border-[#BAE6FD]'
@@ -215,7 +215,7 @@ export function FirstThenBoard({
             <button
               type="button"
               onClick={() => setEditingSlot('then')}
-              className={`px-4 h-10 rounded-xl text-sm font-bold border cursor-pointer ${
+              className={`px-3 py-1.5 min-h-10 rounded-xl text-sm font-bold border cursor-pointer text-left ${
                 editingSlot === 'then'
                   ? 'bg-[#F59E0B] text-[#0F172A] border-[#F59E0B]'
                   : 'bg-[#F0F9FF] text-[#0F172A] border-[#BAE6FD]'

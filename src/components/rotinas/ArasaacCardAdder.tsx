@@ -73,7 +73,7 @@ export function ArasaacCardAdder({
   return (
     <div className="rounded-2xl bg-[#F0F9FF]/70 border border-[#BAE6FD] p-4 flex flex-col gap-3">
       <span className="text-sm font-bold text-[#0F172A]">{title}</span>
-      <div className="flex gap-2">
+      <div className="flex gap-2 min-w-0">
         <input
           type="search"
           aria-label="Buscar cartão na ARASAAC"
@@ -86,13 +86,13 @@ export function ArasaacCardAdder({
             }
           }}
           placeholder="Ex.: escovar, mochila, parque, suco..."
-          className="flex-1 h-10 px-3 rounded-xl border border-[#BAE6FD] bg-white text-sm text-[#0F172A]"
+          className="flex-1 min-w-0 h-10 px-3 rounded-xl border border-[#BAE6FD] bg-white text-sm text-[#0F172A]"
         />
         <button
           type="button"
           onClick={handleSearch}
           disabled={searching || !query.trim()}
-          className="inline-flex items-center gap-1.5 px-3.5 h-10 rounded-xl bg-[#0284C7] text-white text-xs font-bold disabled:opacity-50 cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-3.5 h-10 rounded-xl bg-[#0284C7] text-white text-xs font-bold disabled:opacity-50 cursor-pointer shrink-0"
         >
           <Search className="size-3.5" aria-hidden="true" />
           <span>{searching ? 'Buscando...' : 'Buscar'}</span>
@@ -137,19 +137,19 @@ export function ArasaacCardAdder({
       ) : null}
 
       {selectedItem ? (
-        <div className="flex flex-col sm:flex-row gap-2 pt-1">
+        <div className="flex flex-col sm:flex-row gap-2 pt-1 min-w-0">
           <input
             type="text"
             aria-label="Nome do novo cartão"
             value={customLabel}
             onChange={(e) => setCustomLabel(e.target.value)}
             placeholder="Nome do cartão (ex.: Tomar suco)"
-            className="flex-1 h-10 px-3 rounded-xl border border-[#BAE6FD] bg-white text-sm text-[#0F172A]"
+            className="flex-1 min-w-0 h-10 px-3 rounded-xl border border-[#BAE6FD] bg-white text-sm text-[#0F172A]"
           />
           <button
             type="button"
             onClick={handleConfirmAdd}
-            className="inline-flex items-center justify-center gap-1.5 px-4 h-10 rounded-xl bg-[#F59E0B] text-[#0F172A] text-sm font-bold cursor-pointer"
+            className="inline-flex items-center justify-center gap-1.5 px-4 h-10 rounded-xl bg-[#F59E0B] text-[#0F172A] text-sm font-bold cursor-pointer shrink-0"
           >
             <Plus className="size-4" aria-hidden="true" />
             <span>Salvar no banco</span>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowLeft, Check, Play, RotateCcw, Trash2 } from 'lucide-react';
+import { ArrowLeft, Check, Play, Plus, RotateCcw, Search, Trash2, X } from 'lucide-react';
 import { BigActionButton } from '@/components/shared/BigActionButton';
 import {
   getArasaacPictogramUrl,
@@ -29,6 +29,11 @@ export function ChildOrderBuilder({
     cardBank.slice(0, 5).map((c) => c.id),
   );
   const [orderedIds, setOrderedIds] = useState<string[]>([]);
+  const [filterText, setFilterText] = useState('');
+  const [filterTab, setFilterTab] = useState<'all' | 'selected' | 'custom'>(
+    'all',
+  );
+  const [adderOpen, setAdderOpen] = useState(false);
 
   const selectedCards = selectedIds
     .map((id) => cardBank.find((c) => c.id === id))
@@ -42,6 +47,24 @@ export function ChildOrderBuilder({
     (c) => !orderedIds.includes(c.id),
   );
 
+  const filteredBankCards = cardBank.filter((card) => {
+    const matchesText = card.label
+      .toLowerCase()
+      .includes(filterText.trim().toLowerCase());
+    if (!matchesText) return false;
+    if (filterTab === 'selected') return selectedIds.includes(card.id);
+    if (filterTab === 'custom') return card.id.startsWith('custom-');
+    return true;
+  });
+
+  const scrollToTopSafe = () => {
+    try {
+      window.scrollTo?.({ top: 0, behavior: 'smooth' });
+    } catch {
+      // Ignore in test environments
+    }
+  };
+
   const toggleCardSelection = (id: string) => {
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
@@ -52,6 +75,7 @@ export function ChildOrderBuilder({
     if (selectedCards.length === 0) return;
     setOrderedIds([]);
     setPhase('child_order');
+    scrollToTopSafe();
   };
 
   if (phase === 'child_order') {
@@ -81,7 +105,10 @@ export function ChildOrderBuilder({
               </button>
               <button
                 type="button"
-                onClick={() => setPhase('parent_filter')}
+                onClick={() => {
+                  setPhase('parent_filter');
+                  scrollToTopSafe();
+                }}
                 className="inline-flex items-center gap-1.5 px-3 h-10 rounded-xl border border-[#BAE6FD] bg-white text-xs font-bold text-[#475569] cursor-pointer"
               >
                 <ArrowLeft className="size-3.5" aria-hidden="true" />
@@ -196,10 +223,10 @@ export function ChildOrderBuilder({
               1. Escolha quais cartões ficam disponíveis hoje
             </h2>
             <p className="text-sm text-[#475569] text-pretty">
-              Marque apenas os cartões que você quer liberar (ex.: 7 demandas). Depois a criança decide a ordem.
+              Filtre e marque apenas os cartões que você quer liberar hoje. Depois a criança decide a ordem.
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <button
               type="button"
               onClick={() => setSelectedIds([])}
@@ -213,72 +240,181 @@ export function ChildOrderBuilder({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-          {cardBank.map((card) => {
-            const isSelected = selectedIds.includes(card.id);
-            const isCustom = card.id.startsWith('custom-');
-            return (
-              <div
-                key={card.id}
-                className={`relative rounded-2xl border-2 p-3 flex flex-col items-center gap-2 text-center transition ${
-                  isSelected
-                    ? 'border-[#0284C7] bg-[#F0F9FF]'
-                    : 'border-[#BAE6FD] bg-white hover:border-[#0284C7]/60'
+        {/* Selected tray: instant overview regardless of bank size */}
+        {selectedCards.length > 0 ? (
+          <div
+            data-testid="selected-cards-tray"
+            className="rounded-2xl bg-[#F0F9FF] border border-[#BAE6FD] p-3 flex flex-wrap items-center gap-2"
+          >
+            <span className="text-xs font-bold text-[#0369A1] mr-1">
+              Selecionados para hoje:
+            </span>
+            {selectedCards.map((card) => (
+              <button
+                key={`tray-${card.id}`}
+                type="button"
+                onClick={() => toggleCardSelection(card.id)}
+                title={`Remover ${card.label} da seleção`}
+                className="inline-flex items-center gap-1.5 pl-1.5 pr-2.5 py-1 rounded-xl bg-white border border-[#BAE6FD] text-xs font-bold text-[#0F172A] hover:border-red-300 cursor-pointer"
+              >
+                <img
+                  src={getArasaacPictogramUrl(card.arasaacId)}
+                  alt=""
+                  width={22}
+                  height={22}
+                  className="rounded-md object-contain"
+                />
+                <span>{card.label}</span>
+                <X className="size-3.5 text-[#64748B]" aria-hidden="true" />
+              </button>
+            ))}
+          </div>
+        ) : null}
+
+        {/* Smart Search & Filter Controls */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+          <div className="relative flex-1 min-w-0">
+            <Search
+              className="size-4 text-[#64748B] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+              aria-hidden="true"
+            />
+            <input
+              type="search"
+              aria-label="Filtrar cartões salvos"
+              value={filterText}
+              onChange={(e) => setFilterText(e.target.value)}
+              placeholder="Filtrar cartões pelo nome..."
+              className="w-full min-w-0 h-10 pl-9 pr-3 rounded-xl border border-[#BAE6FD] bg-[#F0F9FF]/40 text-sm text-[#0F172A]"
+            />
+          </div>
+
+          <div className="flex flex-wrap items-center gap-1.5 shrink-0">
+            {(
+              [
+                { id: 'all', label: `Todos (${cardBank.length})` },
+                { id: 'selected', label: `Selecionados (${selectedCards.length})` },
+                {
+                  id: 'custom',
+                  label: `Criados por mim (${
+                    cardBank.filter((c) => c.id.startsWith('custom-')).length
+                  })`,
+                },
+              ] as const
+            ).map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setFilterTab(tab.id)}
+                className={`px-3 h-9 rounded-xl text-xs font-bold border cursor-pointer transition ${
+                  filterTab === tab.id
+                    ? 'bg-[#0284C7] text-white border-[#0284C7]'
+                    : 'bg-white text-[#475569] border-[#BAE6FD] hover:border-[#0284C7]'
                 }`}
               >
-                <button
-                  type="button"
-                  onClick={() => toggleCardSelection(card.id)}
-                  aria-pressed={isSelected}
-                  className="flex flex-col items-center gap-2 w-full cursor-pointer"
-                >
-                  <span
-                    className={`self-start size-6 rounded-full flex items-center justify-center border ${
-                      isSelected
-                        ? 'bg-[#0284C7] border-[#0284C7] text-white'
-                        : 'bg-white border-[#BAE6FD] text-transparent'
-                    }`}
-                  >
-                    <Check className="size-3.5" aria-hidden="true" />
-                  </span>
-                  <img
-                    src={getArasaacPictogramUrl(card.arasaacId)}
-                    alt={card.label}
-                    width={56}
-                    height={56}
-                    className="object-contain bg-white rounded-xl p-1"
-                  />
-                  <span className="text-xs font-bold text-[#0F172A]">
-                    {card.label}
-                  </span>
-                </button>
-
-                {isCustom && onRemoveCardFromBank ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedIds((prev) =>
-                        prev.filter((id) => id !== card.id),
-                      );
-                      onRemoveCardFromBank(card.id);
-                    }}
-                    aria-label={`Remover cartão ${card.label}`}
-                    className="absolute top-2 right-2 size-7 rounded-full bg-white border border-[#BAE6FD] flex items-center justify-center text-[#64748B] hover:text-red-600 cursor-pointer"
-                  >
-                    <Trash2 className="size-3.5" aria-hidden="true" />
-                  </button>
-                ) : null}
-              </div>
-            );
-          })}
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <ArasaacCardAdder
-          onAddCard={(card) => {
-            onAddCardToBank(card);
-            setSelectedIds((prev) => [...prev, card.id]);
-          }}
-        />
+        {/* Scroll-bounded card bank so button below stays reachable */}
+        <div className="max-h-[340px] overflow-y-auto p-1 -mx-1">
+          {filteredBankCards.length === 0 ? (
+            <p className="text-sm text-[#64748B] text-center py-8">
+              Nenhum cartão encontrado com esse filtro.
+            </p>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+              {filteredBankCards.map((card) => {
+                const isSelected = selectedIds.includes(card.id);
+                const isCustom = card.id.startsWith('custom-');
+                return (
+                  <div
+                    key={card.id}
+                    className={`relative rounded-2xl border-2 p-3 flex flex-col items-center gap-2 text-center transition ${
+                      isSelected
+                        ? 'border-[#0284C7] bg-[#F0F9FF]'
+                        : 'border-[#BAE6FD] bg-white hover:border-[#0284C7]/60'
+                    }`}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => toggleCardSelection(card.id)}
+                      aria-pressed={isSelected}
+                      className="flex flex-col items-center gap-2 w-full cursor-pointer"
+                    >
+                      <span
+                        className={`self-start size-6 rounded-full flex items-center justify-center border ${
+                          isSelected
+                            ? 'bg-[#0284C7] border-[#0284C7] text-white'
+                            : 'bg-white border-[#BAE6FD] text-transparent'
+                        }`}
+                      >
+                        <Check className="size-3.5" aria-hidden="true" />
+                      </span>
+                      <img
+                        src={getArasaacPictogramUrl(card.arasaacId)}
+                        alt={card.label}
+                        width={56}
+                        height={56}
+                        className="object-contain bg-white rounded-xl p-1"
+                      />
+                      <span className="text-xs font-bold text-[#0F172A]">
+                        {card.label}
+                      </span>
+                    </button>
+
+                    {isCustom && onRemoveCardFromBank ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedIds((prev) =>
+                            prev.filter((id) => id !== card.id),
+                          );
+                          onRemoveCardFromBank(card.id);
+                        }}
+                        aria-label={`Remover cartão ${card.label}`}
+                        className="absolute top-2 right-2 size-7 rounded-full bg-white border border-[#BAE6FD] flex items-center justify-center text-[#64748B] hover:text-red-600 cursor-pointer"
+                      >
+                        <Trash2 className="size-3.5" aria-hidden="true" />
+                      </button>
+                    ) : null}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Collapsible drawer to create new ARASAAC cards */}
+        <div className="flex flex-col gap-3 pt-1 border-t border-[#BAE6FD]/60">
+          <button
+            type="button"
+            onClick={() => setAdderOpen((v) => !v)}
+            className="self-start inline-flex items-center gap-1.5 px-4 h-10 rounded-2xl border border-[#BAE6FD] bg-[#F0F9FF] text-sm font-bold text-[#0284C7] hover:bg-[#E0F2FE] cursor-pointer"
+          >
+            {adderOpen ? (
+              <>
+                <X className="size-4" aria-hidden="true" />
+                <span>Fechar busca ARASAAC</span>
+              </>
+            ) : (
+              <>
+                <Plus className="size-4" aria-hidden="true" />
+                <span>Criar novo cartão na ARASAAC</span>
+              </>
+            )}
+          </button>
+
+          {adderOpen ? (
+            <ArasaacCardAdder
+              onAddCard={(card) => {
+                onAddCardToBank(card);
+                setSelectedIds((prev) => [...prev, card.id]);
+              }}
+            />
+          ) : null}
+        </div>
       </div>
 
       <BigActionButton

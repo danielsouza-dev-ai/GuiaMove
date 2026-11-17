@@ -410,7 +410,7 @@ export default function RotinasPage() {
                           <div
                             key={`${s.id}-${idx}`}
                             title={s.label}
-                            className="size-11 rounded-xl bg-[#F0F9FF] border border-[#BAE6FD] p-1 flex items-center justify-center"
+                            className="size-11 shrink-0 rounded-xl bg-[#F0F9FF] border border-[#BAE6FD] p-1 flex items-center justify-center"
                           >
                             <img
                               src={getArasaacPictogramUrl(s.arasaacId)}

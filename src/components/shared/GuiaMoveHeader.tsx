@@ -32,7 +32,7 @@ export function GuiaMoveHeader({
           ) : null}
           <div className="min-w-0">
             {title ? (
-              <h1 className="text-lg sm:text-xl font-bold text-[#0F172A] truncate">
+              <h1 className="text-base sm:text-xl font-bold text-[#0F172A] truncate">
                 {title}
               </h1>
             ) : (
@@ -42,7 +42,7 @@ export function GuiaMoveHeader({
               </div>
             )}
             {subtitle ? (
-              <p className="text-xs sm:text-sm text-[#475569] truncate">
+              <p className="text-xs sm:text-sm text-[#475569] line-clamp-2 sm:truncate">
                 {subtitle}
               </p>
             ) : null}
