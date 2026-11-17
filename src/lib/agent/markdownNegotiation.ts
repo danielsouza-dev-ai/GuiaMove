@@ -85,6 +85,24 @@ Durante a execução da rotina, o cartão atual fica em destaque com botão de c
 - Instruções para agentes: ${SITE_ORIGIN}/llms.txt
 `,
 
+  '/sequenciamento': `# Sequenciamento Lógico do Dia (ARASAAC) — GuiaMove
+
+> Jogo educativo e clínico de causa, efeito e noção temporal com pictogramas ARASAAC em 3 níveis (3, 4 e 5 passos) para crianças autistas e com TDAH.
+
+## Níveis e desafios incluídos
+- Nível 1 (3 passos): Calçar o tênis, Lavar as mãos, Hora da sede, Plantinha crescendo.
+- Nível 2 (4 passos): Manhã na escola, Escovar os dentes.
+- Nível 3 (5 passos): Linha do tempo do dia (Amanhecer, Almoço, Tarde/Brincar, Jantar, Dormir).
+- Modo Criador: pais e terapeutas podem montar novos desafios de 3 a 5 passos buscando qualquer pictograma na API da ARASAAC.
+
+## Aprendizagem sem erro (ABA)
+Cartões colocados na posição correta ficam travados em verde; cartões trocados retornam suavemente à bandeja com dicas graduadas e explicação em voz alta (SpeechSynthesis PT-BR) ao concluir.
+
+- URL oficial: ${SITE_ORIGIN}/sequenciamento
+- GuiaMove Home: ${SITE_ORIGIN}/
+- Instruções para agentes: ${SITE_ORIGIN}/llms.txt
+`,
+
   '/about': `# Sobre o GuiaMove
 
 > Portal web gratuito, instalável (PWA) e livre de anúncios com ferramentas práticas de rotina visual, autonomia e regulação sensorial para crianças autistas, com TDAH e em desenvolvimento típico.

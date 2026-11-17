@@ -103,6 +103,7 @@ describe('Is Agentic readiness & machine-readable endpoints', () => {
     expect(urls).toContain('https://guiamove.vercel.app/temporizador');
     expect(urls).toContain('https://guiamove.vercel.app/termometro');
     expect(urls).toContain('https://guiamove.vercel.app/rotinas');
+    expect(urls).toContain('https://guiamove.vercel.app/sequenciamento');
     expect(urls).toContain('https://guiamove.vercel.app/about');
     expect(urls).toContain('https://guiamove.vercel.app/contact');
     expect(urls).toContain('https://guiamove.vercel.app/privacy');

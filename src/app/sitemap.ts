@@ -29,6 +29,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: 'https://guiamove.vercel.app/sequenciamento',
+      lastModified: LAST_MODIFIED,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
       url: 'https://guiamove.vercel.app/about',
       lastModified: LAST_MODIFIED,
       changeFrequency: 'monthly',

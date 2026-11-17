@@ -43,7 +43,7 @@ export const DEFAULT_CARD_BANK: RoutineCardItem[] = [
   { id: 'lavar-maos', label: 'Lavar as mãos', arasaacId: 8975 },
   { id: 'sabonete', label: 'Passar sabonete', arasaacId: 35729 },
   { id: 'toalha', label: 'Secar as mãos', arasaacId: 2566 },
-  { id: 'escovar-dentes', label: 'Escovar os dentes', arasaacId: 6971 },
+  { id: 'escovar-dentes', label: 'Escovar os dentes', arasaacId: 2326 },
   { id: 'banho', label: 'Tomar banho', arasaacId: 26803 },
   { id: 'comer', label: 'Hora de comer', arasaacId: 2349 },
   { id: 'guardar-brinquedos', label: 'Guardar os brinquedos', arasaacId: 5514 },

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Clock, ListChecks, Thermometer } from 'lucide-react';
+import { Clock, Layers, ListChecks, Thermometer } from 'lucide-react';
 import { GuiaMoveHeader } from '@/components/shared/GuiaMoveHeader';
 
 interface HubAppItem {
@@ -44,6 +44,16 @@ const HUB_APPS: HubAppItem[] = [
     iconBorder: 'border-[#6EE7B7]',
     iconColor: 'text-[#047857]',
     Icon: ListChecks,
+  },
+  {
+    id: 'sequenciamento',
+    href: '/sequenciamento',
+    name: 'Sequenciamento Lógico',
+    shortLabel: 'Antes e depois do dia',
+    iconBg: 'bg-[#FFEDD5]',
+    iconBorder: 'border-[#FDBA74]',
+    iconColor: 'text-[#C2410C]',
+    Icon: Layers,
   },
 ];
 
@@ -129,7 +139,7 @@ export default function HomePage() {
 
         <section
           aria-label="Ferramentas disponíveis"
-          className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5"
         >
           {HUB_APPS.map((app) => {
             const IconComponent = app.Icon;
@@ -176,7 +186,7 @@ export default function HomePage() {
           <h2 className="text-lg font-bold text-[#0F172A] text-balance">
             Como cada ferramenta ajuda na autonomia diária
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-[#475569] text-pretty">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm text-[#475569] text-pretty">
             <div className="flex flex-col gap-1">
               <h3 className="font-bold text-[#0F172A]">
                 Temporizador Visual Infantil
@@ -201,6 +211,14 @@ export default function HomePage() {
                 Organiza rotinas fixas como banheiro e higiene, quadro Primeiro/Depois e trilhas com pictogramas ARASAAC onde a criança escolhe a ordem das atividades do dia.
               </p>
             </div>
+            <div className="flex flex-col gap-1">
+              <h3 className="font-bold text-[#0F172A]">
+                Sequenciamento Lógico do Dia
+              </h3>
+              <p>
+                Desafios de causa e efeito com pictogramas ARASAAC em 3 níveis (3, 4 e 5 passos) para trabalhar noção temporal de início, meio, fim, manhã, tarde e noite.
+              </p>
+            </div>
           </div>
         </section>
 
@@ -209,7 +227,7 @@ export default function HomePage() {
           className="rounded-2xl bg-white/75 border border-[#BAE6FD] px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-sm text-[#475569]"
         >
           <span className="font-semibold text-[#0F172A]">Em desenvolvimento:</span>
-          <span className="text-pretty">Sequenciamento Lógico do Dia</span>
+          <span className="text-pretty">Labirinto de Traçado e Jogos Sensoriais</span>
         </section>
       </main>
 

@@ -17,5 +17,8 @@ describe('GuiaMove Hub', () => {
 
     const rotinasLink = screen.getByRole('link', { name: /rotinas/i });
     expect(rotinasLink).toHaveAttribute('href', '/rotinas');
+
+    const seqLink = screen.getByRole('link', { name: /sequenciamento/i });
+    expect(seqLink).toHaveAttribute('href', '/sequenciamento');
   });
 });
