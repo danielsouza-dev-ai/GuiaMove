@@ -26,6 +26,13 @@ export interface RoutinesStorageData {
 }
 
 export const ROTINAS_STORAGE_KEY = 'guiamove_rotinas_v1';
+export const CHILD_DRAFT_STORAGE_KEY = 'guiamove_rotinas_child_draft_v1';
+
+export interface ChildOrderDraft {
+  phase: 'parent_filter' | 'child_order';
+  selectedIds: string[];
+  orderedIds: string[];
+}
 
 /**
  * Returns the static ARASAAC 300px PNG URL for a given pictogram ID.
@@ -151,4 +158,50 @@ export function loadRoutinesData(): RoutinesStorageData {
 
 export function saveRoutinesData(data: RoutinesStorageData): void {
   setLocalJson(ROTINAS_STORAGE_KEY, data);
+}
+
+/**
+ * Loads the persisted child-order routine draft, filtering out any IDs that no longer exist in cardBank.
+ */
+export function loadChildOrderDraft(
+  cardBank: RoutineCardItem[],
+): ChildOrderDraft {
+  const validIds = new Set(cardBank.map((c) => c.id));
+  const fallback: ChildOrderDraft = {
+    phase: 'parent_filter',
+    selectedIds: cardBank.slice(0, 5).map((c) => c.id),
+    orderedIds: [],
+  };
+
+  const saved = getLocalJson<Partial<ChildOrderDraft> | null>(
+    CHILD_DRAFT_STORAGE_KEY,
+    null,
+  );
+  if (!saved || !Array.isArray(saved.selectedIds)) {
+    return fallback;
+  }
+
+  const selectedIds = saved.selectedIds.filter(
+    (id): id is string => typeof id === 'string' && validIds.has(id),
+  );
+  const selectedSet = new Set(selectedIds);
+  const orderedIds = Array.isArray(saved.orderedIds)
+    ? saved.orderedIds.filter(
+        (id): id is string => typeof id === 'string' && selectedSet.has(id),
+      )
+    : [];
+
+  const phase: ChildOrderDraft['phase'] =
+    saved.phase === 'child_order' && selectedIds.length > 0
+      ? 'child_order'
+      : 'parent_filter';
+
+  return { phase, selectedIds, orderedIds };
+}
+
+/**
+ * Persists the current child-order routine draft in localStorage.
+ */
+export function saveChildOrderDraft(draft: ChildOrderDraft): void {
+  setLocalJson(CHILD_DRAFT_STORAGE_KEY, draft);
 }

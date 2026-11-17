@@ -168,4 +168,57 @@ describe('Módulo de Rotinas & Primeiro/Depois', () => {
       screen.queryByRole('button', { name: /escovar os dentes/i }),
     ).not.toBeInTheDocument();
   });
+
+  it('persists child-order draft across reload and allows saving it as a fixed routine', () => {
+    const firstRender = render(<RotinasPage />);
+    fireEvent.click(
+      screen.getByRole('button', { name: /criança escolhe a ordem/i }),
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /limpar seleção/i }));
+    fireEvent.click(screen.getByRole('button', { name: /hora de comer/i }));
+    fireEvent.click(screen.getByRole('button', { name: /tempo de brincar/i }));
+
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: /entregar para a criança escolher a ordem \(2\)/i,
+      }),
+    );
+
+    // Child picks order
+    fireEvent.click(screen.getByRole('button', { name: /tempo de brincar/i }));
+    fireEvent.click(screen.getByRole('button', { name: /hora de comer/i }));
+
+    // Simulate closing/reloading page
+    firstRender.unmount();
+
+    render(<RotinasPage />);
+    fireEvent.click(
+      screen.getByRole('button', { name: /criança escolhe a ordem/i }),
+    );
+
+    // Draft should restore directly to child_order with both cards ordered
+    expect(screen.getByTestId('child-order-phase')).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /começar minha rotina! \(2 de 2\)/i }),
+    ).toBeInTheDocument();
+
+    // Save sequence as a fixed routine
+    fireEvent.click(
+      screen.getByRole('button', { name: /salvar nas rotinas fixas/i }),
+    );
+    fireEvent.change(
+      screen.getByLabelText(/nome para salvar nas rotinas fixas/i),
+      { target: { value: 'Rotina da Tarde' } },
+    );
+    fireEvent.click(screen.getByRole('button', { name: /^salvar$/i }));
+
+    expect(
+      screen.getByText(/sequência salva em rotinas fixas!/i),
+    ).toBeInTheDocument();
+
+    // Switch to Fixed Routines tab and verify it is listed
+    fireEvent.click(screen.getByRole('button', { name: /rotinas fixas/i }));
+    expect(screen.getByText('Rotina da Tarde')).toBeInTheDocument();
+  });
 });

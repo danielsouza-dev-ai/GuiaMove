@@ -1,10 +1,22 @@
 'use client';
 
-import { useState } from 'react';
-import { ArrowLeft, Check, Play, Plus, RotateCcw, Search, Trash2, X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import {
+  ArrowLeft,
+  BookmarkPlus,
+  Check,
+  Play,
+  Plus,
+  RotateCcw,
+  Search,
+  Trash2,
+  X,
+} from 'lucide-react';
 import { BigActionButton } from '@/components/shared/BigActionButton';
 import {
   getArasaacPictogramUrl,
+  loadChildOrderDraft,
+  saveChildOrderDraft,
   type RoutineCardItem,
 } from '@/lib/rotinas/routinesConfig';
 import { ArasaacCardAdder } from './ArasaacCardAdder';
@@ -14,6 +26,7 @@ interface ChildOrderBuilderProps {
   onAddCardToBank: (card: RoutineCardItem) => void;
   onRemoveCardFromBank?: (id: string) => void;
   onStartRoutine: (title: string, steps: RoutineCardItem[]) => void;
+  onSaveAsFixedRoutine?: (title: string, steps: RoutineCardItem[]) => void;
 }
 
 export function ChildOrderBuilder({
@@ -21,6 +34,7 @@ export function ChildOrderBuilder({
   onAddCardToBank,
   onRemoveCardFromBank,
   onStartRoutine,
+  onSaveAsFixedRoutine,
 }: ChildOrderBuilderProps) {
   const [phase, setPhase] = useState<'parent_filter' | 'child_order'>(
     'parent_filter',
@@ -34,6 +48,25 @@ export function ChildOrderBuilder({
     'all',
   );
   const [adderOpen, setAdderOpen] = useState(false);
+  const [savingFixedOpen, setSavingFixedOpen] = useState(false);
+  const [fixedTitle, setFixedTitle] = useState('');
+  const [savedNotice, setSavedNotice] = useState(false);
+  const draftLoadedRef = useRef(false);
+
+  useEffect(() => {
+    const draft = loadChildOrderDraft(cardBank);
+    setPhase(draft.phase);
+    setSelectedIds(draft.selectedIds);
+    setOrderedIds(draft.orderedIds);
+    draftLoadedRef.current = true;
+    // Restore persisted draft on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!draftLoadedRef.current) return;
+    saveChildOrderDraft({ phase, selectedIds, orderedIds });
+  }, [phase, selectedIds, orderedIds]);
 
   const selectedCards = selectedIds
     .map((id) => cardBank.find((c) => c.id === id))
@@ -207,6 +240,85 @@ export function ChildOrderBuilder({
             Começar minha rotina! ({orderedCards.length} de {selectedCards.length})
           </span>
         </BigActionButton>
+
+        {orderedCards.length > 0 && onSaveAsFixedRoutine ? (
+          <div className="rounded-2xl bg-white border border-[#BAE6FD] p-4 flex flex-col gap-3">
+            {savedNotice ? (
+              <div className="flex items-center justify-between gap-2 text-sm font-bold text-[#0369A1]">
+                <span className="inline-flex items-center gap-1.5">
+                  <Check className="size-4" aria-hidden="true" />
+                  Sequência salva em Rotinas Fixas!
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setSavedNotice(false)}
+                  className="text-xs underline text-[#475569] cursor-pointer"
+                >
+                  Fechar
+                </button>
+              </div>
+            ) : savingFixedOpen ? (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const title = fixedTitle.trim();
+                  if (!title) return;
+                  onSaveAsFixedRoutine(title, orderedCards);
+                  setFixedTitle('');
+                  setSavingFixedOpen(false);
+                  setSavedNotice(true);
+                }}
+                className="flex flex-col sm:flex-row gap-2"
+              >
+                <input
+                  type="text"
+                  required
+                  value={fixedTitle}
+                  onChange={(e) => setFixedTitle(e.target.value)}
+                  placeholder="Nome da rotina (ex: Rotina da tarde)"
+                  aria-label="Nome para salvar nas rotinas fixas"
+                  className="flex-1 min-w-0 h-10 px-3 rounded-xl border border-[#BAE6FD] bg-[#F0F9FF]/40 text-sm text-[#0F172A]"
+                />
+                <div className="flex items-center gap-2">
+                  <button
+                    type="submit"
+                    disabled={!fixedTitle.trim()}
+                    className="px-4 h-10 rounded-xl bg-[#0284C7] text-white text-xs font-bold disabled:opacity-50 cursor-pointer"
+                  >
+                    Salvar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSavingFixedOpen(false);
+                      setFixedTitle('');
+                    }}
+                    className="px-3 h-10 rounded-xl border border-[#BAE6FD] bg-white text-xs font-bold text-[#475569] cursor-pointer"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="text-xs text-[#475569]">
+                  Gostou dessa sequência? Salve para reutilizar outros dias.
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSavedNotice(false);
+                    setSavingFixedOpen(true);
+                  }}
+                  className="inline-flex items-center gap-1.5 px-3.5 h-9 rounded-xl border border-[#BAE6FD] bg-[#F0F9FF] text-xs font-bold text-[#0284C7] hover:bg-[#E0F2FE] cursor-pointer"
+                >
+                  <BookmarkPlus className="size-4" aria-hidden="true" />
+                  <span>Salvar nas rotinas fixas</span>
+                </button>
+              </div>
+            )}
+          </div>
+        ) : null}
       </div>
     );
   }

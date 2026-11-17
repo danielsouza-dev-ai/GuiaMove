@@ -452,6 +452,18 @@ export default function RotinasPage() {
               onStartRoutine={(title, steps) =>
                 setRunningRoutine({ title, steps })
               }
+              onSaveAsFixedRoutine={(title, steps) => {
+                const created: FixedRoutine = {
+                  id: `fixed-${Date.now()}`,
+                  title,
+                  description: `${steps.length} passos sequenciados`,
+                  steps,
+                };
+                persistData({
+                  ...data,
+                  fixedRoutines: [created, ...data.fixedRoutines],
+                });
+              }}
             />
           ) : null}
 
