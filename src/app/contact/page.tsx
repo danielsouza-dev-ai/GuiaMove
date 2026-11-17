@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { GuiaMoveHeader } from '@/components/shared/GuiaMoveHeader';
 
 export const metadata: Metadata = {
-  title: 'Contato — GuiaMove (@dansouza.move)',
+  title: 'Contato: GuiaMove (@dansouza.move)',
   description:
     'Canais oficiais de contato, suporte técnico, sugestões de melhorias e parcerias educacionais do GuiaMove.',
   alternates: {
@@ -22,11 +22,11 @@ export default function ContactPage() {
       <main className="flex-1 max-w-3xl w-full mx-auto px-4 py-8 flex flex-col gap-6">
         <article className="rounded-3xl bg-white border border-[#BAE6FD] p-6 sm:p-8 flex flex-col gap-5 shadow-xs">
           <h1 className="text-2xl sm:text-3xl font-bold text-[#0F172A] text-balance">
-            Contato — GuiaMove
+            Contato: GuiaMove
           </h1>
 
           <p className="text-base text-[#334155] text-pretty">
-            O GuiaMove é mantido por Daniel Souza (@dansouza.move) para apoiar famílias, professores, fisioterapeutas, terapeutas ocupacionais, fonoaudiólogos e psicólogos no uso cotidiano de apoios visuais e regulação sensorial.
+            O GuiaMove é mantido por Daniel Souza (@dansouza.move) para apoiar famílias, professores e terapeutas no uso diário de apoios visuais e regulação sensorial.
           </p>
 
           <section className="flex flex-col gap-2">

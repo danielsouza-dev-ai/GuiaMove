@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { GuiaMoveHeader } from '@/components/shared/GuiaMoveHeader';
 
 export const metadata: Metadata = {
-  title: 'Política de Privacidade e LGPD — GuiaMove',
+  title: 'Política de Privacidade e LGPD | GuiaMove',
   description:
     'Saiba como o GuiaMove protege a privacidade infantil com armazenamento 100% local no dispositivo, sem login, anúncios ou envio de dados para a nuvem.',
   alternates: {
@@ -26,7 +26,7 @@ export default function PrivacyPage() {
           </h1>
 
           <p className="text-base text-[#334155] text-pretty">
-            O GuiaMove foi projetado desde a arquitetura inicial com foco rigoroso na proteção de dados infantis e na conformidade com a Lei Geral de Proteção de Dados (LGPD). Nenhuma informação pessoal, fotografia, rotina ou registro emocional inserido nas ferramentas é enviado para servidores próprios ou bancos de dados na nuvem.
+            O GuiaMove guarda todas as informações apenas no seu aparelho, respeitando a Lei Geral de Proteção de Dados (LGPD). Nenhuma foto, rotina ou registro emocional colocado nas ferramentas vai para servidores próprios ou bancos de dados na nuvem.
           </p>
 
           <section className="flex flex-col gap-2">

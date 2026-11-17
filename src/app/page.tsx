@@ -125,7 +125,7 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD_GRAPH) }}
       />
 
-      <GuiaMoveHeader subtitle="Ferramentas gratuitas de rotina, autonomia e movimento por @dansouza.move" />
+      <GuiaMoveHeader subtitle="Ferramentas gratuitas de rotina e autonomia por @dansouza.move" />
 
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-8 sm:py-10 flex flex-col gap-8">
         <section className="flex flex-col gap-2 max-w-2xl">
@@ -133,7 +133,7 @@ export default function HomePage() {
             GuiaMove: ferramentas visuais de rotina infantil e regulação sensorial
           </h1>
           <p className="text-base text-[#475569] text-pretty">
-            Apoio prático para a rotina de casa, da escola e da clínica com crianças autistas (TEA) e com TDAH. Direto no navegador, sem cadastro, sem anúncios e com dados salvos apenas no seu aparelho.
+            Apoio prático para o dia a dia em casa e na clínica com crianças autistas ou com TDAH. Funciona direto no navegador, sem cadastro e sem anúncios, com tudo salvo apenas no seu aparelho.
           </p>
         </section>
 
@@ -192,7 +192,7 @@ export default function HomePage() {
                 Temporizador Visual Infantil
               </h3>
               <p>
-                Substitui a contagem abstrata do relógio por uma sequência visual com personagem e alimento, configurável de 10 segundos a 60 minutos para facilitar transições tranquilas.
+                Mostra o tempo passar com um personagem e alimentos que vão diminuindo, de 10 segundos a 60 minutos, para ajudar nas trocas de atividade.
               </p>
             </div>
             <div className="flex flex-col gap-1">
@@ -216,7 +216,7 @@ export default function HomePage() {
                 Sequenciamento Lógico do Dia
               </h3>
               <p>
-                Desafios de causa e efeito com pictogramas ARASAAC em 3 níveis (3, 4 e 5 passos) para trabalhar noção temporal de início, meio, fim, manhã, tarde e noite.
+                Desafios com pictogramas ARASAAC em 3, 4 e 5 passos para a criança treinar a ordem lógica do que vem antes e depois.
               </p>
             </div>
           </div>

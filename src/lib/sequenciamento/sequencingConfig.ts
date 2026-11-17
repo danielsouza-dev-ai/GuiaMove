@@ -112,7 +112,7 @@ export const DEFAULT_SEQUENCING_CHALLENGES: SequencingChallenge[] = [
     level: 3,
     levelLabel: 'Nível 3 · Dia inteiro (5 passos)',
     explanation:
-      'Incrível! O dia começa ao amanhecer, seguimos para o almoço, brincamos à tarde, jantamos e dormimos à noite.',
+      'Muito bem! O dia começa de manhã, passa pelo almoço, pela brincadeira da tarde, pelo jantar e termina na hora de dormir.',
     steps: [
       { id: 'amanhecer', label: 'Amanhecer / Manhã', arasaacId: 3175 },
       { id: 'almoco', label: 'Almoço', arasaacId: 4611 },

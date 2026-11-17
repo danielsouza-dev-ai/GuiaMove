@@ -17,7 +17,7 @@ const fredoka = Fredoka({
 export const metadata: Metadata = {
   metadataBase: new URL("https://guiamove.vercel.app"),
   title:
-    "GuiaMove — Ferramentas Visuais de Rotina Infantil e Regulação Sensorial",
+    "GuiaMove: Ferramentas Visuais de Rotina Infantil e Regulação Sensorial",
   description:
     "Ferramentas visuais gratuitas de rotina infantil, temporizador visual para autismo, termômetro sensorial (Zones of Regulation) e quadro Primeiro/Depois ARASAAC por @dansouza.move.",
   keywords: [
@@ -37,25 +37,25 @@ export const metadata: Metadata = {
     locale: "pt_BR",
     url: "https://guiamove.vercel.app",
     title:
-      "GuiaMove — Ferramentas Visuais de Rotina Infantil e Regulação Sensorial",
+      "GuiaMove: Ferramentas Visuais de Rotina Infantil e Regulação Sensorial",
     description:
-      "Temporizador visual, termômetro sensorial e rotinas com pictogramas ARASAAC gratuitos para casa, escola e clínica. Sem cadastro e direto no navegador.",
+      "Temporizador visual, termômetro sensorial e rotinas com pictogramas ARASAAC para casa e clínica. Gratuito, sem cadastro e direto no navegador.",
     siteName: "GuiaMove",
     images: [
       {
         url: "https://guiamove.vercel.app/og-image.png",
         width: 1200,
         height: 630,
-        alt: "GuiaMove — Ferramentas Visuais de Rotina Infantil e Regulação Sensorial",
+        alt: "GuiaMove: Ferramentas Visuais de Rotina Infantil e Regulação Sensorial",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     title:
-      "GuiaMove — Ferramentas Visuais de Rotina Infantil e Regulação Sensorial",
+      "GuiaMove: Ferramentas Visuais de Rotina Infantil e Regulação Sensorial",
     description:
-      "Temporizador visual, termômetro sensorial e rotinas visuais ARASAAC gratuitos para rotina em casa e na clínica.",
+      "Temporizador visual, termômetro sensorial e rotinas visuais ARASAAC para usar em casa e na clínica.",
     images: ["https://guiamove.vercel.app/og-image.png"],
   },
   robots: {
