@@ -1,6 +1,51 @@
 import Link from 'next/link';
-import { ArrowRight, Clock, Thermometer } from 'lucide-react';
+import { Clock, ListChecks, Thermometer } from 'lucide-react';
 import { GuiaMoveHeader } from '@/components/shared/GuiaMoveHeader';
+
+interface HubAppItem {
+  id: string;
+  href: string;
+  name: string;
+  shortLabel: string;
+  iconBg: string;
+  iconBorder: string;
+  iconColor: string;
+  customIconSrc?: string; // Ready for future custom SVG/PNG app icons
+  Icon: typeof Clock;
+}
+
+const HUB_APPS: HubAppItem[] = [
+  {
+    id: 'temporizador',
+    href: '/temporizador',
+    name: 'Temporizador Visual',
+    shortLabel: 'Tempo e transições',
+    iconBg: 'bg-[#E0F2FE]',
+    iconBorder: 'border-[#7DD3FC]',
+    iconColor: 'text-[#0284C7]',
+    Icon: Clock,
+  },
+  {
+    id: 'termometro',
+    href: '/termometro',
+    name: 'Termômetro Sensorial',
+    shortLabel: 'Emoções e calma',
+    iconBg: 'bg-[#FEF3C7]',
+    iconBorder: 'border-[#FCD34D]',
+    iconColor: 'text-[#B45309]',
+    Icon: Thermometer,
+  },
+  {
+    id: 'rotinas',
+    href: '/rotinas',
+    name: 'Rotinas & Primeiro/Depois',
+    shortLabel: 'Passo a passo visual',
+    iconBg: 'bg-[#D1FAE5]',
+    iconBorder: 'border-[#6EE7B7]',
+    iconColor: 'text-[#047857]',
+    Icon: ListChecks,
+  },
+];
 
 export default function HomePage() {
   return (
@@ -19,63 +64,44 @@ export default function HomePage() {
 
         <section
           aria-label="Ferramentas disponíveis"
-          className="grid grid-cols-1 sm:grid-cols-2 gap-5"
+          className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-5"
         >
-          <Link
-            href="/temporizador"
-            className="group rounded-3xl bg-white border-2 border-[#BAE6FD] hover:border-[#0284C7] hover:shadow-md p-6 flex flex-col justify-between gap-6 shadow-sm transition duration-150 ease-out active:scale-[0.98]"
-          >
-            <div className="flex items-start justify-between gap-4">
-              <div className="size-12 rounded-2xl bg-[#F0F9FF] border border-[#BAE6FD] flex items-center justify-center text-[#0284C7]">
-                <Clock className="size-6" aria-hidden="true" />
-              </div>
-            </div>
+          {HUB_APPS.map((app) => {
+            const IconComponent = app.Icon;
+            return (
+              <Link
+                key={app.id}
+                href={app.href}
+                className="group rounded-3xl bg-white border-2 border-b-4 border-[#BAE6FD] hover:border-[#0284C7] p-5 sm:p-6 flex flex-col items-center justify-center text-center gap-3.5 shadow-sm transition duration-150 ease-out active:translate-y-0.5 active:scale-[0.99] touch-manipulation"
+              >
+                <div
+                  className={`size-20 sm:size-24 rounded-3xl border-2 ${app.iconBg} ${app.iconBorder} ${app.iconColor} flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform duration-150 ease-out`}
+                >
+                  {app.customIconSrc ? (
+                    <img
+                      src={app.customIconSrc}
+                      alt=""
+                      className="size-14 sm:size-16 object-contain"
+                    />
+                  ) : (
+                    <IconComponent
+                      className="size-10 sm:size-11 stroke-[2.2]"
+                      aria-hidden="true"
+                    />
+                  )}
+                </div>
 
-            <div>
-              <h2 className="text-xl font-bold text-[#0F172A] text-balance">
-                Temporizador Visual
-              </h2>
-              <p className="mt-1.5 text-sm text-[#475569] text-pretty">
-                Contagem visual lúdica para ajudar nas transições sem briga com o relógio.
-              </p>
-            </div>
-
-            <div className="inline-flex items-center gap-2 text-sm font-bold text-[#0284C7]">
-              <span>Abrir temporizador</span>
-              <ArrowRight
-                className="size-4 transition-transform duration-150 ease-out group-hover:translate-x-1"
-                aria-hidden="true"
-              />
-            </div>
-          </Link>
-
-          <Link
-            href="/termometro"
-            className="group rounded-3xl bg-white border-2 border-[#BAE6FD] hover:border-[#0284C7] hover:shadow-md p-6 flex flex-col justify-between gap-6 shadow-sm transition duration-150 ease-out active:scale-[0.98]"
-          >
-            <div className="flex items-start justify-between gap-4">
-              <div className="size-12 rounded-2xl bg-[#FEF3C7]/60 border border-[#FDE68A] flex items-center justify-center text-[#B45309]">
-                <Thermometer className="size-6" aria-hidden="true" />
-              </div>
-            </div>
-
-            <div>
-              <h2 className="text-xl font-bold text-[#0F172A] text-balance">
-                Termômetro Sensorial
-              </h2>
-              <p className="mt-1.5 text-sm text-[#475569] text-pretty">
-                Quatro zonas visuais para a criança mostrar como está e abrir a estratégia de calma em um toque.
-              </p>
-            </div>
-
-            <div className="inline-flex items-center gap-2 text-sm font-bold text-[#0284C7]">
-              <span>Abrir termômetro</span>
-              <ArrowRight
-                className="size-4 transition-transform duration-150 ease-out group-hover:translate-x-1"
-                aria-hidden="true"
-              />
-            </div>
-          </Link>
+                <div className="flex flex-col gap-1">
+                  <h2 className="text-base sm:text-lg font-bold text-[#0F172A] leading-snug text-balance">
+                    {app.name}
+                  </h2>
+                  <span className="text-xs font-medium text-[#475569]">
+                    {app.shortLabel}
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
         </section>
 
         <section
@@ -83,9 +109,7 @@ export default function HomePage() {
           className="rounded-2xl bg-white/75 border border-[#BAE6FD] px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-sm text-[#475569]"
         >
           <span className="font-semibold text-[#0F172A]">Em desenvolvimento:</span>
-          <span className="text-pretty">
-            Sequenciamento Lógico do Dia e Rotinas Primeiro/Depois (ARASAAC)
-          </span>
+          <span className="text-pretty">Sequenciamento Lógico do Dia</span>
         </section>
       </main>
 

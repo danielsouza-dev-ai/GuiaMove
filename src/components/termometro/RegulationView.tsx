@@ -5,6 +5,7 @@ import { CheckCircle2, Volume2 } from 'lucide-react';
 import {
   ARASAAC_ICON_PATHS,
   CALMING_MOVEMENTS,
+  resolveStrategyIconSrc,
   type CalmingMovementType,
   type StrategyIcon,
   type ZoneDefinition,
@@ -313,7 +314,13 @@ export function RegulationView({
               className="size-24 rounded-3xl bg-white border-2 flex items-center justify-center p-2"
               style={{ borderColor: zone.borderHex }}
             >
-              <ArasaacPictogram icon={strategy.icon ?? 'abracar'} size={76} />
+              <img
+                src={resolveStrategyIconSrc(strategy)}
+                alt=""
+                width={76}
+                height={76}
+                className="object-contain select-none"
+              />
             </div>
             <p className="text-2xl sm:text-3xl font-bold text-[#0F172A] leading-snug max-w-md text-pretty">
               {strategy.text || 'Fazer uma pausa tranquila'}

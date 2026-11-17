@@ -14,5 +14,8 @@ describe('GuiaMove Hub', () => {
 
     const thermoLink = screen.getByRole('link', { name: /termômetro/i });
     expect(thermoLink).toHaveAttribute('href', '/termometro');
+
+    const rotinasLink = screen.getByRole('link', { name: /rotinas/i });
+    expect(rotinasLink).toHaveAttribute('href', '/rotinas');
   });
 });

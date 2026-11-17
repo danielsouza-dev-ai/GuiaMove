@@ -1,10 +1,14 @@
-import { beforeEach, describe, expect, it } from 'vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import TermometroPage from '@/app/termometro/page';
 
 describe('Termômetro Sensorial e de Emoções', () => {
   beforeEach(() => {
     localStorage.clear();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('renders the 4 Zones of Regulation levels', () => {
@@ -62,5 +66,65 @@ describe('Termômetro Sensorial e de Emoções', () => {
     expect(
       screen.getByRole('heading', { name: /balanço dos braços/i }),
     ).toBeInTheDocument();
+  });
+
+  it('allows searching ARASAAC API inside Texto dos Pais and saves chosen arasaacId', async () => {
+    vi.useFakeTimers();
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => [
+        { _id: 2456, keywords: [{ keyword: 'urso' }] },
+      ],
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    render(<TermometroPage />);
+
+    // Unlock parental editor (hold 2000ms)
+    const editBtn = screen.getByRole('button', { name: /editar/i });
+    fireEvent.pointerDown(editBtn);
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
+    vi.useRealTimers();
+
+    // Pick "Texto dos Pais" for first zone (Azul)
+    const customTextBtns = screen.getAllByRole('button', {
+      name: /texto dos pais/i,
+    });
+    fireEvent.click(customTextBtns[0]);
+
+    const searchInput = screen.getByLabelText(
+      /buscar pictograma arasaac para zona azul/i,
+    );
+    fireEvent.change(searchInput, { target: { value: 'urso' } });
+
+    const searchBtns = screen.getAllByRole('button', { name: /^buscar$/i });
+    fireEvent.click(searchBtns[0]);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('button', { name: /selecionar pictograma urso/i }),
+      ).toBeInTheDocument();
+    });
+
+    fireEvent.click(
+      screen.getByRole('button', { name: /selecionar pictograma urso/i }),
+    );
+    fireEvent.change(
+      screen.getByLabelText(/texto personalizado da zona azul/i),
+      { target: { value: 'Abraçar o urso' } },
+    );
+    fireEvent.click(screen.getByRole('button', { name: /salvar estratégias/i }));
+
+    fireEvent.click(screen.getByRole('button', { name: /azul/i }));
+    const imgs = screen
+      .getByTestId('regulation-view')
+      .querySelectorAll('img');
+    expect(
+      Array.from(imgs).some((img) =>
+        img.getAttribute('src')?.includes('/2456/2456_300.png'),
+      ),
+    ).toBe(true);
   });
 });

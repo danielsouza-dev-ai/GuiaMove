@@ -28,7 +28,56 @@ export type StrategyIcon =
 export interface ZoneStrategyConfig {
   type: StrategyType;
   icon?: StrategyIcon;
+  arasaacId?: number;
   text?: string;
+}
+
+export interface ArasaacSearchResult {
+  id: number;
+  label: string;
+  src: string;
+}
+
+export function getArasaacPngUrl(id: number): string {
+  return `https://static.arasaac.org/pictograms/${id}/${id}_300.png`;
+}
+
+export function resolveStrategyIconSrc(strategy: ZoneStrategyConfig): string {
+  if (typeof strategy.arasaacId === 'number' && strategy.arasaacId > 0) {
+    return getArasaacPngUrl(strategy.arasaacId);
+  }
+  return ARASAAC_ICON_PATHS[strategy.icon ?? 'abracar'] ?? ARASAAC_ICON_PATHS.abracar;
+}
+
+export async function searchArasaacPictograms(
+  query: string,
+  signal?: AbortSignal,
+): Promise<ArasaacSearchResult[]> {
+  const clean = query.trim();
+  if (!clean) return [];
+
+  const res = await fetch(
+    `https://api.arasaac.org/v1/pictograms/pt/search/${encodeURIComponent(clean)}`,
+    { signal },
+  );
+  if (!res.ok) {
+    if (res.status === 404) return [];
+    throw new Error(`ARASAAC HTTP ${res.status}`);
+  }
+  const data = (await res.json()) as Array<{
+    _id?: number;
+    keywords?: Array<{ keyword?: string }>;
+  }>;
+  if (!Array.isArray(data)) return [];
+
+  return data
+    .filter((item) => typeof item._id === 'number' && item._id > 0)
+    .slice(0, 12)
+    .map((item) => ({
+      id: item._id!,
+      label: item.keywords?.[0]?.keyword ?? clean,
+      src: getArasaacPngUrl(item._id!),
+    }));
 }
 
 export const ARASAAC_ICON_PATHS: Record<StrategyIcon, string> = {
