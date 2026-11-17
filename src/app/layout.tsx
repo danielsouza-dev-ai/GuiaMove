@@ -15,23 +15,48 @@ const fredoka = Fredoka({
 });
 
 export const metadata: Metadata = {
-  title: "GuiaMove — Ferramentas de Rotina e Autonomia | @dansouza.move",
+  metadataBase: new URL("https://guiamove.vercel.app"),
+  title:
+    "GuiaMove — Ferramentas Visuais de Rotina Infantil e Regulação Sensorial",
   description:
-    "Ferramentas gratuitas de rotina, autonomia e movimento por @dansouza.move",
+    "Ferramentas visuais gratuitas de rotina infantil, temporizador visual para autismo, termômetro sensorial (Zones of Regulation) e quadro Primeiro/Depois ARASAAC por @dansouza.move.",
+  keywords: [
+    "ferramentas visuais de rotina infantil",
+    "temporizador visual autismo",
+    "termômetro sensorial Zones of Regulation",
+    "quadro primeiro e depois ARASAAC",
+    "autonomia infantil TEA TDAH",
+    "GuiaMove",
+  ],
   applicationName: "GuiaMove",
+  alternates: {
+    canonical: "https://guiamove.vercel.app",
+  },
   openGraph: {
     type: "website",
     locale: "pt_BR",
-    title: "GuiaMove — Ferramentas de Rotina e Autonomia",
+    url: "https://guiamove.vercel.app",
+    title:
+      "GuiaMove — Ferramentas Visuais de Rotina Infantil e Regulação Sensorial",
     description:
-      "Temporizador visual e termômetro sensorial gratuitos para rotina em casa e na clínica. Sem cadastro, direto no navegador.",
+      "Temporizador visual, termômetro sensorial e rotinas com pictogramas ARASAAC gratuitos para casa, escola e clínica. Sem cadastro e direto no navegador.",
     siteName: "GuiaMove",
+    images: [
+      {
+        url: "https://guiamove.vercel.app/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "GuiaMove — Ferramentas Visuais de Rotina Infantil e Regulação Sensorial",
+      },
+    ],
   },
   twitter: {
-    card: "summary",
-    title: "GuiaMove — Ferramentas de Rotina e Autonomia",
+    card: "summary_large_image",
+    title:
+      "GuiaMove — Ferramentas Visuais de Rotina Infantil e Regulação Sensorial",
     description:
-      "Temporizador visual e termômetro sensorial gratuitos para rotina em casa e na clínica.",
+      "Temporizador visual, termômetro sensorial e rotinas visuais ARASAAC gratuitos para rotina em casa e na clínica.",
+    images: ["https://guiamove.vercel.app/og-image.png"],
   },
   robots: {
     index: true,

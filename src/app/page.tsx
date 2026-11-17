@@ -47,18 +47,83 @@ const HUB_APPS: HubAppItem[] = [
   },
 ];
 
+const JSON_LD_GRAPH = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://guiamove.vercel.app/#organization',
+      name: 'GuiaMove',
+      url: 'https://guiamove.vercel.app',
+      description:
+        'Ferramentas visuais gratuitas de rotina infantil, autonomia e regulação sensorial criadas por Daniel Souza (@dansouza.move) para crianças autistas, com TDAH e típicas.',
+      knowsAbout: [
+        'Ferramentas visuais de rotina infantil',
+        'Temporizador visual para autismo',
+        'Termômetro sensorial Zones of Regulation',
+        'Quadro Primeiro e Depois com pictogramas ARASAAC',
+      ],
+      sameAs: ['https://www.instagram.com/dansouza.move/'],
+      contactPoint: {
+        '@type': 'ContactPoint',
+        email: 'contato@guiamove.vercel.app',
+        telephone: '+55-11-99999-0000',
+        contactType: 'customer support',
+        availableLanguage: ['Portuguese'],
+      },
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'São Paulo',
+        addressRegion: 'SP',
+        addressCountry: 'BR',
+      },
+    },
+    {
+      '@type': 'SoftwareApplication',
+      '@id': 'https://guiamove.vercel.app/#app',
+      name: 'GuiaMove',
+      applicationCategory: 'EducationalApplication',
+      operatingSystem: 'Web, iOS, Android',
+      url: 'https://guiamove.vercel.app',
+      description:
+        'Portal PWA gratuito com Temporizador Visual Infantil, Termômetro Sensorial (Zones of Regulation) e Rotinas Visuais Primeiro/Depois integradas aos pictogramas ARASAAC.',
+      keywords:
+        'ferramentas visuais de rotina infantil, temporizador visual autismo, termômetro sensorial, quadro primeiro e depois ARASAAC',
+      serviceType:
+        'Ferramentas visuais de rotina infantil e regulação sensorial',
+      author: {
+        '@id': 'https://guiamove.vercel.app/#organization',
+      },
+      publisher: {
+        '@id': 'https://guiamove.vercel.app/#organization',
+      },
+      offers: {
+        '@type': 'Offer',
+        name: 'Ferramentas visuais de rotina infantil e regulação sensorial',
+        price: '0',
+        priceCurrency: 'BRL',
+      },
+    },
+  ],
+};
+
 export default function HomePage() {
   return (
     <div className="min-h-dvh flex flex-col bg-[#F0F9FF]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD_GRAPH) }}
+      />
+
       <GuiaMoveHeader subtitle="Ferramentas gratuitas de rotina, autonomia e movimento por @dansouza.move" />
 
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-8 sm:py-10 flex flex-col gap-8">
         <section className="flex flex-col gap-2 max-w-2xl">
           <h1 className="text-2xl sm:text-3xl font-bold text-[#0F172A] leading-tight text-balance">
-            Apoio prático para a rotina de casa e da clínica
+            GuiaMove: ferramentas visuais de rotina infantil e regulação sensorial
           </h1>
           <p className="text-base text-[#475569] text-pretty">
-            Ferramentas visuais diretas no navegador, sem cadastro e sem anúncios. Tudo fica salvo apenas no seu aparelho.
+            Apoio prático para a rotina de casa, da escola e da clínica com crianças autistas (TEA) e com TDAH. Direto no navegador, sem cadastro, sem anúncios e com dados salvos apenas no seu aparelho.
           </p>
         </section>
 
@@ -105,6 +170,41 @@ export default function HomePage() {
         </section>
 
         <section
+          aria-label="Como funciona o GuiaMove"
+          className="rounded-3xl bg-white border border-[#BAE6FD] p-5 sm:p-6 flex flex-col gap-4"
+        >
+          <h2 className="text-lg font-bold text-[#0F172A] text-balance">
+            Como cada ferramenta ajuda na autonomia diária
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-[#475569] text-pretty">
+            <div className="flex flex-col gap-1">
+              <h3 className="font-bold text-[#0F172A]">
+                Temporizador Visual Infantil
+              </h3>
+              <p>
+                Substitui a contagem abstrata do relógio por uma sequência visual com personagem e alimento, configurável de 10 segundos a 60 minutos para facilitar transições tranquilas.
+              </p>
+            </div>
+            <div className="flex flex-col gap-1">
+              <h3 className="font-bold text-[#0F172A]">
+                Termômetro Sensorial Zones of Regulation
+              </h3>
+              <p>
+                Ajuda a criança a apontar como se sente entre quatro zonas de cor e abrir em um toque a estratégia combinada: respiração guiada, som suave de chuva, pausa ou movimentos calmantes.
+              </p>
+            </div>
+            <div className="flex flex-col gap-1">
+              <h3 className="font-bold text-[#0F172A]">
+                Rotinas Visuais e Quadro Primeiro/Depois
+              </h3>
+              <p>
+                Organiza rotinas fixas como banheiro e higiene, quadro Primeiro/Depois e trilhas com pictogramas ARASAAC onde a criança escolhe a ordem das atividades do dia.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section
           aria-label="Próximas ferramentas"
           className="rounded-2xl bg-white/75 border border-[#BAE6FD] px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-sm text-[#475569]"
         >
@@ -113,8 +213,24 @@ export default function HomePage() {
         </section>
       </main>
 
-      <footer className="py-5 px-4 text-center text-xs text-[#475569] border-t border-[#BAE6FD]/60 bg-white/60">
-        GuiaMove por <span className="font-semibold text-[#0F172A]">@dansouza.move</span> · Acadêmico de Fisioterapia, ABA e IA
+      <footer className="py-5 px-4 text-center text-xs text-[#475569] border-t border-[#BAE6FD]/60 bg-white/60 flex flex-col items-center gap-2">
+        <div>
+          GuiaMove por <span className="font-semibold text-[#0F172A]">@dansouza.move</span> · Acadêmico de Fisioterapia, ABA e IA
+        </div>
+        <nav aria-label="Links institucionais" className="flex flex-wrap items-center justify-center gap-4">
+          <Link href="/about" className="hover:text-[#0F172A] underline">
+            Sobre
+          </Link>
+          <Link href="/contact" className="hover:text-[#0F172A] underline">
+            Contato
+          </Link>
+          <Link href="/privacy" className="hover:text-[#0F172A] underline">
+            Privacidade
+          </Link>
+          <Link href="/llms.txt" className="hover:text-[#0F172A] underline">
+            Para Agentes (llms.txt)
+          </Link>
+        </nav>
       </footer>
     </div>
   );
